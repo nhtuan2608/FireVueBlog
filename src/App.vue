@@ -1,15 +1,25 @@
 <template>
   <div class="app-wrapper">
     <div class="app">
+      <Navigation />
+      <ToTopScreen />
       <router-view />
+      <Footer />
     </div>
   </div>
 </template>
 
 <script>
+import Footer from './components/Footer.vue';
+import Navigation from './components/Navigation.vue';
+import ToTopScreen from './components/ToTopScreen.vue';
 export default {
   name: "app",
-  components: {},
+  components: {
+    Navigation,
+    Footer,
+    ToTopScreen
+  },
   data() {
     return {};
   },
@@ -24,6 +34,7 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 
 * {
+  user-select: none;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -50,5 +61,19 @@ export default {
 
 .link-light {
   color: #fff;
+}
+
+.arrow {
+  margin-left: 8px;
+  widows: 12px;
+  path {
+    fill: #000;
+  }
+}
+
+.arrow-light {
+  path {
+    fill: #fff;
+  }
 }
 </style>
