@@ -15,8 +15,10 @@
         </ul>
       </div>
     </nav>
-    <menuIcon class="menu-icon" @click="toggleMobileNav" v-show="mobie"/>
-    <transition name="mobile-nav">
+    <a href="javascript:void(0)" class="menuLink" v-bind:class="isToggling">
+      <menuIcon class="menu-icon" @click="toggleMobileNav" v-show="mobie"/>
+    </a>
+    <transition name="mobile-nav" v-on:before-enter="beforeEnter" v-on:enter="entered">
       <ul class="mobile-nav" v-show="mobileNav">
         <h2 class="header" style="color: #fff;">FireBlogs</h2>
         <hr/>
@@ -31,23 +33,39 @@
 
 <script>
 import menuIcon from "../assets/Icons/bars-regular.svg";
+const $ = require('jquery');
 export default {
   name: "navigation",
   components: {
     menuIcon,
   },
+  // props: ["isInActive"],
   data() {
     return {
       mobie: null,
       mobileNav: null,
       windowWidth: null,
+      isToggling: null,
     };
   },
   created() {
     window.addEventListener('resize', this.checkScreen);
+    // this.checkOpen();
     this.checkScreen();
   },
+  mounted() {
+    // this.checkOpen();
+  },
   methods: {
+    // checkOpen() {
+    //   console.log("isInActive: " + this.isInActive);
+    // },
+    beforeEnter() {
+      this.isToggling = 'link-disabled';
+    },
+    entered() {
+      this.isToggling = '';
+    },
     checkScreen() {
       this.windowWidth = window.innerWidth;
       if (this.windowWidth <= 750) {
@@ -56,12 +74,33 @@ export default {
       }
       this.mobie = false;
       this.mobileNav = false;
+      $('.mobile-nav').removeClass('isActive');
       return false;
     },
 
     toggleMobileNav() {
+      // if(isToggling) {
+      //   $('.menuLink').addClass('link-disabled');
+      // }
+      var isRequested = $('.mobile-nav').hasClass('requestClose');
+      console.log(isRequested);
+
+      // Click outside the Nav Moblie
+      if (isRequested) {
+        this.mobileNav = !this.mobileNav;
+        $('.mobile-nav').removeClass('requestClose');
+      }
+
       this.mobileNav = !this.mobileNav;
-    }
+      if (this.mobileNav) {
+        $('.mobile-nav').addClass('isActive');
+      } else {
+        $('.mobile-nav').removeClass('isActive');
+      }
+      // this.isToggling = '';      // if(!isToggling) {
+        // $('.menuLink').removeClass('link-disabled');
+      // }
+    },
   }
 };
 </script>
@@ -72,7 +111,7 @@ header {
     width: 100%;
     background-color: #fff;
     padding: 0 25px;
-    z-index: 0;
+    z-index: 1;
     box-shadow: 0 0 1px rgba(40, 41, 61, 0.4), 0 2px 4px rgba(96, 97, 112, 0.4);
 }
 
@@ -162,4 +201,13 @@ header {
  .mobile-nav-leave-to {
    transform: translateX(-250px);
  }
+
+ .requestClose {
+    transition: all 1s ease;
+    transform: translateX(-250px);
+  }
+
+  .link-disabled {
+    pointer-events: none;
+  }
 </style>

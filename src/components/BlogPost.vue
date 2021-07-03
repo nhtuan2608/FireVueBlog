@@ -102,21 +102,73 @@ export default {
 
       .link {
         color: #000;
+        border-radius: 5px;
+        box-shadow: 2px 2px 2px 2px rgba(153, 153, 153, 0.5);
         display: inline-flex;
         align-items: center;
         margin-top: 32px;
-        padding-bottom: 4px;
+        padding: 0px 5px 4px 5px;
         border-bottom: 1px solid transparent;
         transition: 0.5s ease-in all;
+        z-index: 2;
 
         &:hover {
+          border-bottom: 2px solid;
           border-bottom-color: #303030;
+          animation-duration: 2s;
+          position: relative;
+          animation-name: linkHover;
+          animation-iteration-count: infinite;
+
+          @keyframes linkHover {
+            0%   { left:0px; top:0px;}
+            50%  { left:20px; top:0px;}
+            100% { left:0px; top:0px;}
+         }
+        }
+        
+        @media (max-width: 700px) {
+            border-bottom: 2px solid;
+            border-bottom-color: #303030;
+            animation-duration: 2s;
+            position: relative;
+            animation-name: linkHover;
+            animation-iteration-count: infinite;
+
+            @keyframes linkHover {
+                0%   { left:0px; top:0px;}
+                50%  { left:20px; top:0px;}
+                100% { left:0px; top:0px;}
+            }
         }
       }
 
       .link-light {
         &:hover {
           border-bottom-color: #fff;
+          animation-duration: 2s;
+          position: relative;
+          animation-name: linkHover;
+          animation-iteration-count: infinite;
+
+          @keyframes linkHover {
+            0%   { left:0px; top:0px;}
+            50%  { left:20px; top:0px;}
+            100% { left:0px; top:0px;}
+         }
+        }
+        @media (max-width: 700px) {
+            // border-bottom-color: #303030;
+            animation-duration: 2s;
+            position: relative;
+            animation-name: linkHover;
+            animation-iteration-count: infinite;
+
+            @keyframes linkHover {
+                0%   { left:0px; top:0px;}
+                50%  { left:20px; top:0px;}
+                100% { left:0px; top:0px;}
+            }
         }
       }
     }

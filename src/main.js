@@ -5,7 +5,6 @@ import store from "./store";
 import Vue2Editor from "vue2-editor";
 
 Vue.use(Vue2Editor);
-
 Vue.config.productionTip = false;
 
 new Vue({

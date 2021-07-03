@@ -1,8 +1,8 @@
 <template>
-  <div class="app-wrapper">
+  <div class="app-wrapper" @mousewheel="checkScroll">
     <div class="app">
       <Navigation />
-      <ToTopScreen />
+      <ToTopScreen :classMain="appWrapper"/>
       <router-view />
       <Footer />
     </div>
@@ -13,19 +13,52 @@
 import Footer from './components/Footer.vue';
 import Navigation from './components/Navigation.vue';
 import ToTopScreen from './components/ToTopScreen.vue';
+const $ = require('jquery');
+
 export default {
   name: "app",
   components: {
     Navigation,
     Footer,
-    ToTopScreen
+    ToTopScreen,
   },
   data() {
-    return {};
+    return {
+      appWrapper: "app-wrapper",
+      isTopPage: true,
+    };
   },
   created() {},
+  beforeMount() {},
   mounted() {},
-  methods: {},
+  methods: {
+    checkLoadPage() {
+      if (!this.isTopPage) {
+        window.scroll(0, 0);
+        return false;
+      }
+    },
+    checkScroll() {
+      $(window).on('scroll', function () {
+          var $this = $(this),
+              $body = $('body');
+
+          var percent = Math.round($this.scrollTop() / ($body.height() - $this.height()) * 100);
+          // console.log('Scroll at: ' + percent + '% screen');
+          
+          if(percent >= 90) {
+            $('#scrollTopButton').addClass('scrollTopButton-Background');
+            $('#scrollTopButton').css('top', 'calc(100% - 200px)');
+            this.isTopPage = false
+          } else {
+            $('#scrollTopButton').removeClass('scrollTopButton-Background');
+            $('#scrollTopButton').css('top', 'calc(100% - 100px)');
+          }
+
+          this.isTopPage = percent == 0 ? true : false;
+      });
+    },
+  },
   watch: {},
 };
 </script>
@@ -39,6 +72,10 @@ export default {
   padding: 0;
   box-sizing: border-box;
   font-family: "Quicksand", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .app {
@@ -74,6 +111,15 @@ export default {
 .arrow-light {
   path {
     fill: #fff;
+  }
+}
+
+.scrollTopButton-Background {
+  background-color:#fff;
+  border-radius: 15px;
+
+  &:hover {
+    opacity: 1;
   }
 }
 </style>

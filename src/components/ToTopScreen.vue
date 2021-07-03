@@ -1,27 +1,35 @@
 <template>
     <div>
-        <scrollIcon @click="toTopScreen" class="scrollBtn"/>
+        <img src="../assets/Icons/1.png" 
+                @click="toTopScreen(classMain)"
+                @mousewheel="checkIsTopScreen"
+                alt="scroll to top of Screen" 
+                width="30px"
+                height="30px"
+                id="scrollTopButton" 
+                class="scrollBtn lazyloaded"/>
     </div>
     
 </template>
 
 <script>
-import scrollIcon from "../assets/Icons/to-top-triangle.svg";
+const $ = require('jquery');
 export default {
     name: 'TopNavigator',
-    components: {
-        scrollIcon
-    },
-    created() {
-        this.toTopScreen();
-    },
+    props: ["classMain"],
+    components: {},
+    created() {},
+    mounted() {},
     methods: {
-        toTopScreen() {
-            document.getElementById('home').scrollTop;
+        toTopScreen(element) {
+            var chageLocation = 5;
+            window.scroll($('.' + element).clientHeight - chageLocation, 0);
+            setTimeout(function() {
+                window.scroll(0, 0);
+            }, 100);
         },
-        checkisTopScreen() {
-            
-        }
+        checkIsTopScreen() {
+        },
     }
 }
 </script>
@@ -29,18 +37,13 @@ export default {
 <style lang="scss" scoped>
     .scrollBtn {
         position: fixed;
-        opacity: 50%;
-        left: calc(100% - 100px);
-        top: calc(100% - 80px);
+        opacity: 0.5;
+        left: calc(100% - 50px);
+        top: calc(100% - 50px);
         z-index: 10;
 
-        // @media (max-device-width: 689px) {
-        //     top: calc(100% - 300px);
-        // }
-    }
-
-    .scrollBtn:hover {
-        box-shadow: 1px 4px #857a7a;
-        border-radius: 35px;
+        &:hover {
+            opacity: 1;
+        }
     }
 </style>
