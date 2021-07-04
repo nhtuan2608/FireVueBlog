@@ -113,7 +113,7 @@ export default {
         z-index: 2;
 
         &:hover {
-          border-bottom: 2px solid;
+          border-bottom: 1px solid;
           border-bottom-color: #303030;
           animation-duration: 2s;
           position: relative;
@@ -158,7 +158,6 @@ export default {
          }
         }
         @media (max-width: 700px) {
-            // border-bottom-color: #303030;
             animation-duration: 2s;
             position: relative;
             animation-name: linkHover;

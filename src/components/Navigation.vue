@@ -8,8 +8,8 @@
       </div>
       <div class="nav-links">
         <ul v-show="!mobie">
-          <router-link class="link" to="#">Home</router-link>
-          <router-link class="link" to="#">Blogs</router-link>
+          <router-link class="link" to="home">Home</router-link>
+          <router-link class="link" to="articles">Articles</router-link>
           <router-link class="link" to="#">Create/ Post</router-link>
           <router-link class="link" to="#">Login/Register</router-link>
         </ul>
@@ -23,7 +23,7 @@
         <h2 class="header" style="color: #fff;">FireBlogs</h2>
         <hr/>
         <router-link class="link" to="#">Home</router-link>
-        <router-link class="link" to="#">Blogs</router-link>
+        <router-link class="link" to="#">Articles</router-link>
         <router-link class="link" to="#">Create/ Post</router-link>
         <router-link class="link" to="#">Login/Register</router-link>
       </ul>
