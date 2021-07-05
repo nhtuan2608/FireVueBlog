@@ -8,7 +8,7 @@
         <h3>※Lastest Articles</h3>
         <span class="hr"></span>
         <div class="article-cards">
-          <Article :article="article" v-for="(article, index) in sampleArticleCards" :key="index"/>
+          <ArticleCard :article="article" v-for="(article, index) in sampleArticleCards" :key="index"/>
         </div>
       </div>
     </div>
@@ -17,13 +17,13 @@
 
 <script>
 import BlogPost from '../components/BlogPost.vue'
-import Article from '../components/ArticleCard.vue'
+import ArticleCard from '../components/ArticleCard.vue'
 const $ = require('jquery');
 export default {
   name: "Home",
   components: {
     BlogPost,
-    Article,
+    ArticleCard,
   },
   data() {
     return {
@@ -45,12 +45,21 @@ export default {
           blogCoverPhoto: "designed-for-everyone",
         },
       ],
-      sampleArticleCards: [
-        { articleTitle: "Article #1", articleCoverPhoto: "stock-1", createdDate: "May 1, 2021"},
-        { articleTitle: "Article #2", articleCoverPhoto: "stock-2", createdDate: "May 7, 2021" },
-        { articleTitle: "Article #3", articleCoverPhoto: "stock-3", createdDate: "May 14, 2021" },
-        { articleTitle: "Article #4", articleCoverPhoto: "stock-4", createdDate: "May 21, 2021" },
-      ],
+      /**
+       * Move to store to control state
+       * Using computed 
+       */
+      // sampleArticleCards: [
+      //   { articleTitle: "Article #1", articleCoverPhoto: "stock-1", createdDate: "May 1, 2021"},
+      //   { articleTitle: "Article #2", articleCoverPhoto: "stock-2", createdDate: "May 7, 2021" },
+      //   { articleTitle: "Article #3", articleCoverPhoto: "stock-3", createdDate: "May 14, 2021" },
+      //   { articleTitle: "Article #4", articleCoverPhoto: "stock-4", createdDate: "May 21, 2021" },
+      // ],
+    }
+  },
+  computed: {
+    sampleArticleCards() {
+      return this.$store.state.sampleArticleCards;
     }
   },
   methods: {
@@ -77,11 +86,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .home {
-    margin-top: 80px;
-    z-index: 0;
-  }
-
   .article-cards-wrap {
     h3 {
       font-weight: 300;

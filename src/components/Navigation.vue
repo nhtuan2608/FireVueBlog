@@ -2,14 +2,14 @@
   <header>
     <nav class="container">
       <div class="branding">
-        <router-link class="header" :to="{ name: 'Home' }">
+        <router-link class="header" :to="{ name: '/',  }">
           FireBlogs
         </router-link>
       </div>
       <div class="nav-links">
         <ul v-show="!mobie">
-          <router-link class="link" to="home">Home</router-link>
-          <router-link class="link" to="articles">Articles</router-link>
+          <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
+          <router-link class="link" :to="{ name: 'Articles' }">Articles</router-link>
           <router-link class="link" to="#">Create/ Post</router-link>
           <router-link class="link" to="#">Login/Register</router-link>
         </ul>
@@ -22,8 +22,8 @@
       <ul class="mobile-nav" v-show="mobileNav">
         <h2 class="header" style="color: #fff;">FireBlogs</h2>
         <hr/>
-        <router-link class="link" to="#">Home</router-link>
-        <router-link class="link" to="#">Articles</router-link>
+        <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
+        <router-link class="link" :to="{ name: 'Articles' }">Articles</router-link>
         <router-link class="link" to="#">Create/ Post</router-link>
         <router-link class="link" to="#">Login/Register</router-link>
       </ul>

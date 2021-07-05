@@ -20,8 +20,8 @@
         </div>
         <div class="col-2">
             <ul>
-                <router-link class="link" :to="{name: 'home'}">Home</router-link>
-                <router-link class="link" :to="{name: 'articles'}">Articles</router-link>
+                <router-link class="link" :to="{name: '/'}">Home</router-link>
+                <router-link class="link" :to="{name: 'Articles'}">Articles</router-link>
             </ul>
         </div>
       </div>

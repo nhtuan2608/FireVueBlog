@@ -1,14 +1,20 @@
 <template>
   <div class="article-wrapper">
     <div class="article-card">
-      <div class="icons">
-        <div class="icon edit-icon">
-          <Edit class="edit" />
-        </div>
-        <div class="icon delete-icon">
-          <Delete class="delete" />
-        </div>
+      <transition name="fade" mode="out-in">
+        <div class="icons" v-show="isEditingMode" >
+          <div class="icon edit-icon">
+            <Edit class="edit" />
+          </div>
+          <div style="padding: 2px;">
+          </div>
+          <div class="icon delete-icon">
+            <Delete class="delete" />
+          </div>
       </div>
+      </transition>
+
+      
 
       <img
         :src="require(`../assets/blogCards/${article.articleCoverPhoto}.jpg`)"
@@ -38,6 +44,11 @@ export default {
     Edit,
     Delete,
   },
+  computed: {
+    isEditingMode() {
+      return this.$store.state.isEditingMode;
+    }
+  }
 };
 </script>
 
@@ -55,8 +66,7 @@ export default {
 
   &:hover {
     transform: rotateZ(-1deg) scale(1.01);
-    box-shadow: 0 4px 6px -1px rbga(0, 0, 0, 0.1),
-      0 2px 4px -1px rbga(0, 0, 0, 0.06);
+    box-shadow: 0 4px 6px -1px rbga(0, 0, 0, 0.1), 0 2px 4px -1px rbga(0, 0, 0, 0.06);
   }
 
   .icons {
@@ -64,7 +74,7 @@ export default {
     position: absolute;
     bottom: 10px;
     right: 10px;
-    z-index: 99;
+    z-index: 10;
 
     .icon {
       display: flex;
@@ -75,7 +85,7 @@ export default {
       border-radius: 50%;
       background-color: #fff;
       transition: 0.5s ease all;
-    //   border: 1px solid #000;
+      border: 1px solid #000;
 
       .edit,
       .delete {
@@ -161,4 +171,12 @@ export default {
     
   }
 }
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0
+}
+
 </style>

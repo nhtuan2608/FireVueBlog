@@ -39,8 +39,8 @@ export default {
         position: fixed;
         opacity: 0.5;
         left: calc(100% - 50px);
-        top: calc(100% - 50px);
-        z-index: 10;
+        // top: calc(100% - 5px);
+        z-index: 3;
 
         &:hover {
             opacity: 1;

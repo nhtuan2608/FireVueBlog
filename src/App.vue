@@ -2,8 +2,10 @@
   <div class="app-wrapper" @mousewheel="checkScroll">
     <div class="app">
       <Navigation />
-      <ToTopScreen :classMain="appWrapper"/>
-      <router-view />
+      <div class="app-container">
+        <ToTopScreen :classMain="appWrapper"/>
+        <router-view />
+      </div>
       <Footer />
     </div>
   </div>
@@ -52,7 +54,7 @@ export default {
             this.isTopPage = false
           } else {
             $('#scrollTopButton').removeClass('scrollTopButton-Background');
-            $('#scrollTopButton').css('top', 'calc(100% - 100px)');
+            $('#scrollTopButton').css('top', 'calc(100% - 50px)');
           }
 
           this.isTopPage = percent == 0 ? true : false;
@@ -82,6 +84,11 @@ html {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+
+  .app-container {
+    margin-top: 80px;
+    z-index: 0;
+  }
 }
 
 .container {
