@@ -31,7 +31,7 @@ export default {
         title: "Welcome!",
         blogPost: "Weekly blog articles with all things programming including HTML, CSS, JavaScript and more. Register today to never miss a post!",
         isFirstScreen: true,
-        photo: "coding"
+        photo: "coding",
       },
       sampleBlogPost: [
         {

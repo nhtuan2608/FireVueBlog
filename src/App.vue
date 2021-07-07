@@ -1,7 +1,9 @@
 <template>
-  <div class="app-wrapper" @mousewheel="checkScroll">
+  <div class="app-wrapper" 
+        @mousewheel="checkMouseScroll" 
+        v-bind:oncontextmenu="disableOnContextMenu">
     <div class="app">
-      <Navigation />
+      <Navigation :url="urlRouter"/>
       <div class="app-container">
         <ToTopScreen :classMain="appWrapper"/>
         <router-view />
@@ -28,19 +30,60 @@ export default {
     return {
       appWrapper: "app-wrapper",
       isTopPage: true,
+      disableOnContextMenu: false,
+      urlRouter: '',
     };
   },
-  created() {},
-  beforeMount() {},
-  mounted() {},
+  created() {
+    this.initPage();
+  },
+  beforeUpdate() {
+    this.checkRouter();
+  },
+  computed: {
+    isDevMode() {
+      return this.$store.state.isDevMode;
+    }
+  },
   methods: {
-    checkLoadPage() {
-      if (!this.isTopPage) {
-        window.scroll(0, 0);
-        return false;
-      }
+    // Initialize
+    initPage() {
+      this.checkIsDevMode();
+      this.checkRouter();
+
+
+      // window.scroll(0, 0);
+      // var distance = $('.app-wrapper').offset().top,
+      // $window = $(window);
+
+      // console.log('distance: ' + distance);
+
+      // $window.scroll(function() {
+      //     if ( $window.scrollTop() >= distance ) {
+      //         // Your div has reached the top
+      //     }
+      // });
+      
+
+      // console.log('checkLoadPage: ' + this.isTopPage);
+      // if (!this.isTopPage) {
+      //   window.scroll(0, 0);
+      //   return false;
+      // }
     },
-    checkScroll() {
+    checkRouter() {
+      var url = this.$route.name;
+      this.urlRouter = url;
+    },
+    checkIsDevMode() {
+      if (!this.isDevMode) {
+        this.disableOnContextMenu = 'return false';
+      } else {
+        this.disableOnContextMenu = '';
+      }
+      return false;
+    },
+    checkMouseScroll() {
       $(window).on('scroll', function () {
           var $this = $(this),
               $body = $('body');
@@ -60,13 +103,26 @@ export default {
           this.isTopPage = percent == 0 ? true : false;
       });
     },
+    
+    checkPositionScroll() {
+
+    },
   },
-  watch: {},
+  watch: {
+    // $(window).on("scroll", function() {
+    //   var scrollHeight = $(document).height();
+    //   var scrollPosition = $(window).height() + $(window).scrollTop();
+    //   if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+    //       // when scroll to bottom of the page
+    //   }
+    // });
+  },
 };
 </script>
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
 * {
   user-select: none;

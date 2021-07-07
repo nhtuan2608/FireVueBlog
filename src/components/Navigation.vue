@@ -2,17 +2,56 @@
   <header>
     <nav class="container">
       <div class="branding">
-        <router-link class="header" :to="{ name: '/',  }">
+        <router-link class="header" :to="{ name: '/' }">
           FireBlogs
         </router-link>
       </div>
-      <div class="nav-links">
-        <ul v-show="!mobie">
+      
+      <div class="nav-links" v-show="!mobie">
+        <ul>
           <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
           <router-link class="link" :to="{ name: 'Articles' }">Articles</router-link>
           <router-link class="link" to="#">Create/ Post</router-link>
           <router-link class="link" to="#">Login/Register</router-link>
         </ul>
+        <navLanguage />
+        <!-- <div class="languages">
+          <div class="dropdown">
+            <button class="dropbtn">
+              <i class="material-icons">language</i>
+              <i class="material-icons">arrow_drop_down</i>
+            </button>
+            <div class="dropdown-content">
+              <span>
+                <a href="#" @click="changeLanguage('en')">
+                  <img :src="require('../assets/flag/GB-UK-flag.png')" height="30px"/>
+                  <span class="txt">EN</span>
+                  <span v-if="checkLaguage.chosenLanguage == 'en'">
+                    <i class="material-icons">done</i>
+                  </span>
+                </a>
+              </span>
+              <span>
+                <a href="#" @click="changeLanguage('vn')">
+                  <img :src="require('../assets/flag/VN-Vietnam-flag.png')" height="30px" />
+                  <span class="txt">VN</span>
+                  <span v-if="checkLaguage.chosenLanguage == 'vn'">
+                    <i class="material-icons">done</i>
+                  </span>
+                </a>
+              </span>
+              <span>
+                <a href="#" @click="changeLanguage('jp')">
+                  <img :src="require('../assets/flag/JP-Japan-flag.png')" height="30px" />
+                  <span class="txt">JP</span>
+                  <span v-if="checkLaguage.chosenLanguage == 'jp'">
+                    <i class="material-icons">done</i>
+                  </span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div> -->
       </div>
     </nav>
     <a href="javascript:void(0)" class="menuLink" v-bind:class="isToggling">
@@ -33,12 +72,15 @@
 
 <script>
 import menuIcon from "../assets/Icons/bars-regular.svg";
+import navLanguage from "../components/Nav-Language.vue";
 const $ = require('jquery');
 export default {
   name: "navigation",
   components: {
     menuIcon,
+    navLanguage,
   },
+  props: ['url'],
   // props: ["isInActive"],
   data() {
     return {
@@ -52,14 +94,29 @@ export default {
     window.addEventListener('resize', this.checkScreen);
     // this.checkOpen();
     this.checkScreen();
+    this.initNav();
   },
   mounted() {
     // this.checkOpen();
+  },
+  computed: {
+    // getLanguagesPackage() {
+    //   return this.$store.state.languagesPackage;
+    // },
   },
   methods: {
     // checkOpen() {
     //   console.log("isInActive: " + this.isInActive);
     // },
+    initNav() {
+      var arrLink = $('nav.container').find('a.link');
+      $.each(arrLink, function(key, val) {
+        if (val.href.split('/')[3] == this.url) {
+          arrLink[key].addClass('router-link-exact-active.router-link-active');
+          return false;
+        }
+      })
+    },
     beforeEnter() {
       this.isToggling = 'link-disabled';
     },
@@ -113,6 +170,67 @@ header {
     padding: 0 25px;
     z-index: 1;
     box-shadow: 0 0 1px rgba(40, 41, 61, 0.4), 0 2px 4px rgba(96, 97, 112, 0.4);
+
+    .languages {
+      margin-top: 5px;
+
+      /* The dropdown container */
+      .dropdown {
+        float: left;
+        overflow: hidden;
+      }
+
+      /* Dropdown button */
+      .dropdown .dropbtn {
+        font-size: 16px;
+        border: none;
+        outline: none;
+        background-color: inherit;
+        font-family: inherit; /* Important for vertical align on mobile phones */
+        margin: 0; /* Important for vertical align on mobile phones */
+      }
+
+      /* Add a red background color to navbar links on hover */
+      .navbar a:hover, .dropdown:hover .dropbtn {
+        // color: aqua;
+      }
+
+      /* Dropdown content (hidden by default) */
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        right: 10px;
+        background-color: #f9f9f9;
+        min-width: 120px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+      }
+
+      /* Links inside the dropdown */
+      .dropdown-content a {
+        float: none;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        display: flex;
+
+        .txt {
+          margin: 5px 5px;
+        }
+      }
+
+      /* Add a grey background color to dropdown links on hover */
+      .dropdown-content a:hover {
+        background-color: #ddd;
+      }
+
+      /* Show the dropdown menu on hover */
+      .dropdown:hover .dropdown-content {
+        display: block;
+      }
+    }
 }
 
 .link {
@@ -123,6 +241,9 @@ header {
     &:hover {
         color: aqua;
     }
+}
+a.router-link-exact-active.router-link-active {
+  color: aqua;
 }
 
  nav {

@@ -16,13 +16,13 @@
     </div>
     <div class="blog-photo">
       <img
-        v-if="post.welcomeScreen"
-        :src="require(`../assets/blogPhotos/${post.photo}.jpg`)"
+        v-if="post.isFirstScreen"
+        :src="require(`../assets/blogPhotos/${this.post.photo}.jpg`)"
         alt=""
       />
       <img
         v-else
-        :src="require(`../assets/blogPhotos/${post.blogCoverPhoto}.jpg`)"
+        :src="require(`../assets/blogPhotos/${this.post.blogCoverPhoto}.jpg`)"
         alt=""
       />
     </div>
