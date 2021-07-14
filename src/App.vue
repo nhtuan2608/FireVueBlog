@@ -2,8 +2,9 @@
   <div class="app-wrapper" 
         @mousewheel="checkMouseScroll" 
         v-bind:oncontextmenu="disableOnContextMenu">
+    
     <div class="app">
-      <Navigation :url="urlRouter"/>
+      <Navigation v-if="!disabledNavigation"/>
       <div class="app-container">
         <ToTopScreen :classMain="appWrapper"/>
         <router-view />
@@ -31,18 +32,18 @@ export default {
       appWrapper: "app-wrapper",
       isTopPage: true,
       disableOnContextMenu: false,
-      urlRouter: '',
+      disabledNavigation: null,
     };
   },
   created() {
     this.initPage();
   },
-  beforeUpdate() {
-    this.checkRouter();
-  },
   computed: {
     isDevMode() {
       return this.$store.state.isDevMode;
+    },
+    isMaintenance() {
+      return this.$store.state.isMaintenance;
     }
   },
   methods: {
@@ -50,7 +51,6 @@ export default {
     initPage() {
       this.checkIsDevMode();
       this.checkRouter();
-
 
       // window.scroll(0, 0);
       // var distance = $('.app-wrapper').offset().top,
@@ -72,8 +72,17 @@ export default {
       // }
     },
     checkRouter() {
-      var url = this.$route.name;
-      this.urlRouter = url;
+      if (this.isMaintenance || this.checkExceptionRouter()) {
+        this.disabledNavigation = true;
+        return;
+      }
+      this.disabledNavigation = false;
+    },
+    checkExceptionRouter() {
+      if (this.$route.name == 'Maintenance') {
+        return true;
+      }
+      return false;
     },
     checkIsDevMode() {
       if (!this.isDevMode) {
@@ -103,19 +112,11 @@ export default {
           this.isTopPage = percent == 0 ? true : false;
       });
     },
-    
-    checkPositionScroll() {
-
-    },
   },
   watch: {
-    // $(window).on("scroll", function() {
-    //   var scrollHeight = $(document).height();
-    //   var scrollPosition = $(window).height() + $(window).scrollTop();
-    //   if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
-    //       // when scroll to bottom of the page
-    //   }
-    // });
+    $route() {
+      this.checkRouter();
+    }
   },
 };
 </script>

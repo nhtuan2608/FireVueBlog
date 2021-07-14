@@ -15,43 +15,6 @@
           <router-link class="link" to="#">Login/Register</router-link>
         </ul>
         <navLanguage />
-        <!-- <div class="languages">
-          <div class="dropdown">
-            <button class="dropbtn">
-              <i class="material-icons">language</i>
-              <i class="material-icons">arrow_drop_down</i>
-            </button>
-            <div class="dropdown-content">
-              <span>
-                <a href="#" @click="changeLanguage('en')">
-                  <img :src="require('../assets/flag/GB-UK-flag.png')" height="30px"/>
-                  <span class="txt">EN</span>
-                  <span v-if="checkLaguage.chosenLanguage == 'en'">
-                    <i class="material-icons">done</i>
-                  </span>
-                </a>
-              </span>
-              <span>
-                <a href="#" @click="changeLanguage('vn')">
-                  <img :src="require('../assets/flag/VN-Vietnam-flag.png')" height="30px" />
-                  <span class="txt">VN</span>
-                  <span v-if="checkLaguage.chosenLanguage == 'vn'">
-                    <i class="material-icons">done</i>
-                  </span>
-                </a>
-              </span>
-              <span>
-                <a href="#" @click="changeLanguage('jp')">
-                  <img :src="require('../assets/flag/JP-Japan-flag.png')" height="30px" />
-                  <span class="txt">JP</span>
-                  <span v-if="checkLaguage.chosenLanguage == 'jp'">
-                    <i class="material-icons">done</i>
-                  </span>
-                </a>
-              </span>
-            </div>
-          </div>
-        </div> -->
       </div>
     </nav>
     <a href="javascript:void(0)" class="menuLink" v-bind:class="isToggling">
@@ -99,11 +62,7 @@ export default {
   mounted() {
     // this.checkOpen();
   },
-  computed: {
-    // getLanguagesPackage() {
-    //   return this.$store.state.languagesPackage;
-    // },
-  },
+  computed: {},
   methods: {
     // checkOpen() {
     //   console.log("isInActive: " + this.isInActive);

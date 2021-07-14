@@ -1,5 +1,5 @@
 <template>
-  <div class="languages">
+  <div class="languages" v-if="!getLanguagesPackage.isOff">
         <div class="dropdown">
         <button class="dropbtn">
             <i class="material-icons">language</i>
@@ -63,7 +63,7 @@ export default {
 
       /* Add a red background color to navbar links on hover */
       .navbar a:hover, .dropdown:hover .dropbtn {
-        // color: aqua;
+        color: aqua;
       }
 
       /* Dropdown content (hidden by default) */
