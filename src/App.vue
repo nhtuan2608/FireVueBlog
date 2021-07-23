@@ -3,14 +3,17 @@
         @mousewheel="checkMouseScroll" 
         v-bind:oncontextmenu="disableOnContextMenu">
     
-    <div class="app">
-      <Navigation v-if="!disabledNavigation"/>
+    <div class="app" v-if="!isError">
+      <Navigation :disabledNavigation="disabledNavigation" v-if="!disabledNavigation"/>
       <div class="app-container">
         <ToTopScreen :classMain="appWrapper"/>
         <router-view />
       </div>
-      <Footer />
+      <Footer :isMaintenance="isMaintenance"/>
     </div>
+    <!-- <div class="app-errorPage" v-if="!!isError">
+      <router-view />
+    </div> -->
   </div>
 </template>
 
@@ -32,11 +35,26 @@ export default {
       appWrapper: "app-wrapper",
       isTopPage: true,
       disableOnContextMenu: false,
-      disabledNavigation: null,
+      // disabledNavigation: null,
+      // isErrorPage: false,
     };
+  },
+  beforeCreate() {
+    
+  },
+  beforeUpdate() {
+    // window.onbeforeunload = function () {
+    //   return '';
+    // }
   },
   created() {
     this.initPage();
+  },
+  mounted() {
+    // console('mounted');
+    // if (checkIsErrorPage()) {
+    //   this.$store.commit("setIsErrorPage", false);
+    // }
   },
   computed: {
     isDevMode() {
@@ -44,14 +62,35 @@ export default {
     },
     isMaintenance() {
       return this.$store.state.isMaintenance;
+    },
+    disabledNavigation: {
+      get() {
+        return this.$store.state.disabledNavigation;
+      },
+      set(payload) {
+        this.$store.commit("setDisabledNavigation", payload);
+      }
+    },
+    isError: {
+      get() {
+        return this.$store.state.isError;
+      },
+      set(payload) {
+        this.$store.commit("setIsErrorPage", payload);
+      }
     }
   },
   methods: {
     // Initialize
     initPage() {
-      this.checkIsDevMode();
+      console.log(this.disabledNavigation);
       this.checkRouter();
-
+      if (!this.checkIsErrorPage()) {
+        this.checkIsDevMode();
+      } else {
+        this.$router.push("/error").catch(()=>{});
+        return;
+      }
       // window.scroll(0, 0);
       // var distance = $('.app-wrapper').offset().top,
       // $window = $(window);
@@ -71,16 +110,43 @@ export default {
       //   return false;
       // }
     },
+    checkIsErrorPage() {
+      if (this.isError) {
+        return true;
+      }
+      return false;
+    },
     checkRouter() {
-      if (this.isMaintenance || this.checkExceptionRouter()) {
-        this.disabledNavigation = true;
+      if (this.checkExceptionRouter()) {
+        // this.$store.commit("setDisabledNavigation", true);
         return;
       }
-      this.disabledNavigation = false;
     },
     checkExceptionRouter() {
-      if (this.$route.name == 'Maintenance') {
-        return true;
+      if (!this.isError) {
+        // if (this.isMaintenance) {
+        //   if (this.$route.name == 'Maintenance' ||
+        //     this.$route.name == 'Login' ||
+        //     this.$route.name == 'Register' ||
+        //     this.$route.name == 'ForgotPassword'
+        //   ) {
+        //     return true;
+        //   }
+        //   return false;
+        // }
+        if (!this.isMaintenance) {
+          if (this.$route.name == 'Maintenance') {
+            this.$router.push("/error").catch(()=>{});
+            this.$store.commit("setDisabledNavigation", true);
+            return false;
+          }
+          // if (this.$route.name == 'Error' && !this.isError) {
+          //   console.log('eject');
+          //   this.$router.push("/").catch(()=>{});
+          //   return false;
+          // }
+          return true;
+        }
       }
       return false;
     },
@@ -114,8 +180,10 @@ export default {
     },
   },
   watch: {
-    $route() {
-      this.checkRouter();
+    $route(to , from) {
+      console.log(this.isError);
+      console.log("to", to);
+      console.log("from", from);
     }
   },
 };
@@ -218,6 +286,25 @@ html {
     // Pc, Desktop
     @media (min-width: 1200px) {
       grid-template-columns: repeat(4, 1fr);
+    }
+
+    .articles {
+      display: grid;
+      gap: 32px;
+      grid-template-columns: 1fr;
+
+      // Phone
+      @media (min-width: 500px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      // Ipad
+      @media (min-width: 900px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      // Pc, Desktop
+      @media (min-width: 1200px) {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
   }
 }

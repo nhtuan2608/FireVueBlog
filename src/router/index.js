@@ -3,6 +3,11 @@ import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Articles from "../views/Articles.vue";
 import Maintenance from "../views/Maintenance.vue";
+import Login from "../views/Login.vue";
+import Register from "../views/Register.vue";
+import ForgotPassword from "../views/ForgotPassword.vue";
+import ErrorPage from "../views/ErrorPage.vue";
+// import $Store from "../store";
 
 Vue.use(VueRouter);
 
@@ -24,6 +29,23 @@ const routes = [
     },
   },
   {
+    path: "/error",
+    name: "Error",
+    component: ErrorPage,
+    meta: {
+      title: 'Error Page',
+    },
+    // beforeEnter: (to, from, next) => {
+    //   if (window.location.pathname == '/Error') {
+    //     if (to.path == '/Error') {
+    //       next(false);
+    //       return;
+    //     }
+    //   }
+    //   next();
+    // },
+  },
+  {
     path: "/articles",
     name: "Articles",
     component: Articles,
@@ -37,6 +59,30 @@ const routes = [
     component: Maintenance,
     meta: {
       title: 'Maintenance',
+    },
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+    meta: {
+      title: 'Login',
+    },
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: Register,
+    meta: {
+      title: 'Register',
+    },
+  },
+  {
+    path: "/forgotpassword",
+    name: "ForgotPassword",
+    component: ForgotPassword,
+    meta: {
+      title: 'Forgot Password',
     },
   },
 ];
@@ -63,7 +109,17 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | FireBlogs`;
+  // console.log(VueRouter.START_LOCATION);
+  // if (!$Store.state.isError) {
+  //   next();
+  //   return;
+  // }
+
+  // console.log($Store.state.isError);
+  // console.log(from);
+  // if (from === 'error') {
+  //   console.log('trùng');
+  // }
   next();
 });
-
 export default router;

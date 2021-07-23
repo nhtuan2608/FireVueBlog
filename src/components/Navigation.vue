@@ -1,5 +1,6 @@
 <template>
   <header>
+    <!-- Nav PC -->
     <nav class="container">
       <div class="branding">
         <router-link class="header" :to="{ name: '/' }">
@@ -7,7 +8,7 @@
         </router-link>
       </div>
       
-      <div class="nav-links" v-show="!mobie">
+      <div class="nav-links" v-show="!mobie || !!disabledNavigation">
         <ul>
           <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
           <router-link class="link" :to="{ name: 'Articles' }">Articles</router-link>
@@ -17,6 +18,9 @@
         <navLanguage />
       </div>
     </nav>
+    <!-- Nav PC -->
+
+    <!-- Nav Mobile -->
     <a href="javascript:void(0)" class="menuLink" v-bind:class="isToggling">
       <menuIcon class="menu-icon" @click="toggleMobileNav" v-show="mobie"/>
     </a>
@@ -30,6 +34,7 @@
         <router-link class="link" to="#">Login/Register</router-link>
       </ul>
     </transition>
+    <!-- Nav Mobile -->
   </header>
 </template>
 
@@ -43,7 +48,7 @@ export default {
     menuIcon,
     navLanguage,
   },
-  props: ['url'],
+  props: ['disabledNavigation'],
   // props: ["isInActive"],
   data() {
     return {
@@ -51,6 +56,7 @@ export default {
       mobileNav: null,
       windowWidth: null,
       isToggling: null,
+      currentUrl: '',
     };
   },
   created() {
@@ -68,9 +74,11 @@ export default {
     //   console.log("isInActive: " + this.isInActive);
     // },
     initNav() {
+      this.currentUrl = window.location.pathname.split('/')[1];
       var arrLink = $('nav.container').find('a.link');
       $.each(arrLink, function(key, val) {
-        if (val.href.split('/')[3] == this.url) {
+        // console.log('this.url: ' + this.currentUrl);
+        if (val.href.split('/')[3] == this.currentUrl) {
           arrLink[key].addClass('router-link-exact-active.router-link-active');
           return false;
         }
