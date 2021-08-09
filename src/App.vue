@@ -275,6 +275,12 @@ html {
     text-transform: uppercase;
 }
 
+.errMessage {
+  text-align: center;
+  font-size: 12px;
+  color: red;
+}
+
 .scrollTopButton-Background {
   background-color:#fff;
   border-radius: 15px;
