@@ -11,7 +11,7 @@ export default new Vuex.Store({
         isDevMode: true,		// if false, user can't inspect element (F12)
         isMaintenance: false,   // if true, move to maintenance page
         isError: JSON.parse(localStorage.getItem('isError')) ? JSON.parse(localStorage.getItem('isError')) : false,			// if true, move to error page
-        disabledNavigation: false,
+        disabledNavigation: JSON.parse(localStorage.getItem('pageNotFound')) ? JSON.parse(localStorage.getItem('pageNotFound')) : false,
         // plugins: [createPersistedState({
         //     storage: window.sessionStorage,
         //     getState: (key) => Cookies.getJSON(key),
@@ -39,10 +39,11 @@ export default new Vuex.Store({
         },
         setIsErrorPage(state, payload) {
             state.isError = payload;
-            localStorage.setItem("isError",JSON.stringify(state.isError)); // OR
+            localStorage.setItem("isError" ,JSON.stringify(state.isError)); // OR
         },
         setDisabledNavigation(state, payload) {
             state.disabledNavigation = payload;             // if true, disable navigation
+            localStorage.setItem("pageNotFound" ,JSON.stringify(state.disabledNavigation)); // OR
         }
     },
     actions: {

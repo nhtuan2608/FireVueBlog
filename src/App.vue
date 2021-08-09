@@ -6,10 +6,10 @@
     <div class="app" v-if="!isError">
       <Navigation :disabledNavigation="disabledNavigation" v-if="!disabledNavigation"/>
       <div class="app-container">
-        <ToTopScreen :classMain="appWrapper"/>
+        <ToTopScreen :classMain="appWrapper" v-if="!disabledNavigation"/>
         <router-view />
       </div>
-      <Footer :isMaintenance="isMaintenance"/>
+      <Footer :isMaintenance="isMaintenance" v-if="!disabledNavigation"/>
     </div>
     <!-- <div class="app-errorPage" v-if="!!isError">
       <router-view />
@@ -50,11 +50,9 @@ export default {
   created() {
     this.initPage();
   },
-  mounted() {
-    // console('mounted');
-    // if (checkIsErrorPage()) {
-    //   this.$store.commit("setIsErrorPage", false);
-    // }
+  mounted() {},
+  beforeDestroy() {
+    this.checkLeavePage();
   },
   computed: {
     isDevMode() {
@@ -135,16 +133,23 @@ export default {
         //   return false;
         // }
         if (!this.isMaintenance) {
+          if (this.$route.name == 'Login' ||
+            this.$route.name == 'Register' ||
+            this.$route.name == 'ForgotPassword'
+          ) {
+            this.$store.commit("setDisabledNavigation", true);
+            return false;
+          }
           if (this.$route.name == 'Maintenance') {
             this.$router.push("/error").catch(()=>{});
             this.$store.commit("setDisabledNavigation", true);
             return false;
           }
-          // if (this.$route.name == 'Error' && !this.isError) {
-          //   console.log('eject');
-          //   this.$router.push("/").catch(()=>{});
-          //   return false;
-          // }
+          if (this.$route.name == 'Error') {
+            this.$router.push("/error").catch(()=>{});
+            this.$store.commit("setDisabledNavigation", true);
+            return false;
+          }
           return true;
         }
       }
@@ -177,6 +182,11 @@ export default {
 
           this.isTopPage = percent == 0 ? true : false;
       });
+    },
+    checkLeavePage() {
+      if (this.$route.name != 'Error' || this.$route.name != 'error') {
+        this.$store.commit("setDisabledNavigation", false);
+      }
     },
   },
   watch: {
@@ -251,6 +261,18 @@ html {
   path {
     fill: #fff;
   }
+}
+
+.router-button, button {
+    transition: all .5s ease;
+    cursor: pointer;
+    margin-top: 24px;
+    padding: 12px 24px;
+    background-color: #303030;
+    color: #fff;
+    border-radius: 20px;
+    border: none;
+    text-transform: uppercase;
 }
 
 .scrollTopButton-Background {

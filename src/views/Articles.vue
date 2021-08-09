@@ -4,7 +4,8 @@
           <div class="toolbox">
             <div class="left">
               <!-- <SearchBar /> -->
-              <SearchBar :isCustomized="true"/>
+              <SearchBar />
+              <!-- <SearchBar :isCustomized="true"/> -->
             </div>
             <div class="right">
               <div class="switch">
