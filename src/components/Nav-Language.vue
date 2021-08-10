@@ -1,7 +1,7 @@
 <template>
   <div class="languages" v-if="!getLanguagesPackage.isOff">
         <div class="dropdown">
-        <button class="dropbtn">
+        <button href="javascript:void(0);" class="dropbtn" >
             <i class="material-icons">language</i>
             <i class="material-icons">arrow_drop_down</i>
         </button>
@@ -52,18 +52,19 @@ export default {
       }
 
       /* Dropdown button */
-      .dropdown .dropbtn {
+      .dropdown button.dropbtn {
         font-size: 16px;
         border: none;
         outline: none;
         background-color: inherit;
         font-family: inherit; /* Important for vertical align on mobile phones */
         margin: 0; /* Important for vertical align on mobile phones */
+        color: #000;
       }
 
       /* Add a red background color to navbar links on hover */
       .navbar a:hover, .dropdown:hover .dropbtn {
-        color: aqua;
+        // color: aqua;
       }
 
       /* Dropdown content (hidden by default) */
@@ -86,10 +87,6 @@ export default {
         display: block;
         text-align: center;
         display: flex;
-
-        a.router-link-exact-active.router-link-active {
-            color: aqua;
-        }
         
         .txt {
           margin: 5px 5px;

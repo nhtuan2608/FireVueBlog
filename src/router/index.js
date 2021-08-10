@@ -7,7 +7,7 @@ import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import ForgotPassword from "../views/ForgotPassword.vue";
 import ErrorPage from "../views/ErrorPage.vue";
-// import $Store from "../store";
+import $Store from "../store";
 
 Vue.use(VueRouter);
 
@@ -109,17 +109,16 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | FireBlogs`;
-  // console.log(VueRouter.START_LOCATION);
-  // if (!$Store.state.isError) {
-  //   next();
-  //   return;
-  // }
-
-  // console.log($Store.state.isError);
-  // console.log(from);
-  // if (from === 'error') {
-  //   console.log('trùng');
-  // }
+  console.log(to.name);
+  if (to.name == 'Login' ||
+      to.name == 'Register' ||
+      to.name == 'ForgotPassword'
+  ) {
+    console.log(to.name);
+    $Store.commit("setDisabledNavigation", true);
+  } else {
+    $Store.commit("setDisabledNavigation", false);
+  }
   next();
 });
 export default router;

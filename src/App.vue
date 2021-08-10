@@ -35,16 +35,13 @@ export default {
       appWrapper: "app-wrapper",
       isTopPage: true,
       disableOnContextMenu: false,
-      // disabledNavigation: null,
-      // isErrorPage: false,
     };
   },
   beforeCreate() {
-    
   },
   beforeUpdate() {
     // window.onbeforeunload = function () {
-    //   return '';
+    //   this.checkExceptionRouter();
     // }
   },
   created() {
@@ -116,30 +113,21 @@ export default {
     },
     checkRouter() {
       if (this.checkExceptionRouter()) {
-        // this.$store.commit("setDisabledNavigation", true);
         return;
       }
     },
     checkExceptionRouter() {
       if (!this.isError) {
-        // if (this.isMaintenance) {
-        //   if (this.$route.name == 'Maintenance' ||
-        //     this.$route.name == 'Login' ||
-        //     this.$route.name == 'Register' ||
-        //     this.$route.name == 'ForgotPassword'
-        //   ) {
-        //     return true;
-        //   }
-        //   return false;
-        // }
         if (!this.isMaintenance) {
-          if (this.$route.name == 'Login' ||
-            this.$route.name == 'Register' ||
-            this.$route.name == 'ForgotPassword'
-          ) {
-            this.$store.commit("setDisabledNavigation", true);
-            return false;
-          }
+          // if (this.$route.name == 'Login' ||
+          //   this.$route.name == 'Register' ||
+          //   this.$route.name == 'ForgotPassword'
+          // ) {
+          //   // this.$store.commit("setDisabledNavigation", true);
+          //   return false;
+          // } else {
+          //   // this.$store.commit("setDisabledNavigation", false);
+          // }
           if (this.$route.name == 'Maintenance') {
             this.$router.push("/error").catch(()=>{});
             this.$store.commit("setDisabledNavigation", true);
@@ -190,11 +178,11 @@ export default {
     },
   },
   watch: {
-    $route(to , from) {
-      console.log(this.isError);
-      console.log("to", to);
-      console.log("from", from);
-    }
+    // $route(to , from) {
+    //   console.log(this.isError);
+    //   console.log("to", to);
+    //   console.log("from", from);
+    // }
   },
 };
 </script>
