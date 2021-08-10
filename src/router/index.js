@@ -33,7 +33,7 @@ const routes = [
     name: "Error",
     component: ErrorPage,
     meta: {
-      title: 'Error Page',
+      title: 'ErrorPage',
     },
     // beforeEnter: (to, from, next) => {
     //   if (window.location.pathname == '/Error') {
@@ -118,6 +118,13 @@ router.beforeEach((to, from, next) => {
     $Store.commit("setDisabledNavigation", true);
   } else {
     $Store.commit("setDisabledNavigation", false);
+  }
+  if (to.name != 'Error' || to.name != 'error') {
+    if (to.name != 'Maintenance') {
+      $Store.commit("setDisabledNavigation", false);
+    } else {
+      $Store.commit("setDisabledNavigation", true);
+    }
   }
   next();
 });

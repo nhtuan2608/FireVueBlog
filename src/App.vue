@@ -49,7 +49,6 @@ export default {
   },
   mounted() {},
   beforeDestroy() {
-    this.checkLeavePage();
   },
   computed: {
     isDevMode() {
@@ -83,7 +82,7 @@ export default {
       if (!this.checkIsErrorPage()) {
         this.checkIsDevMode();
       } else {
-        this.$router.push("/error").catch(()=>{});
+        this.$router.push({ name: "Error" }).catch(()=>{});
         return;
       }
       // window.scroll(0, 0);
@@ -119,26 +118,21 @@ export default {
     checkExceptionRouter() {
       if (!this.isError) {
         if (!this.isMaintenance) {
-          // if (this.$route.name == 'Login' ||
-          //   this.$route.name == 'Register' ||
-          //   this.$route.name == 'ForgotPassword'
-          // ) {
-          //   // this.$store.commit("setDisabledNavigation", true);
-          //   return false;
-          // } else {
-          //   // this.$store.commit("setDisabledNavigation", false);
-          // }
           if (this.$route.name == 'Maintenance') {
-            this.$router.push("/error").catch(()=>{});
+            this.$router.push({ name: "Error" }).catch(()=>{});
             this.$store.commit("setDisabledNavigation", true);
             return false;
           }
           if (this.$route.name == 'Error') {
-            this.$router.push("/error").catch(()=>{});
+            this.$router.push({ name: "Error" }).catch(()=>{});
             this.$store.commit("setDisabledNavigation", true);
             return false;
           }
           return true;
+        } else {
+          this.$router.push({ name: "Maintenance" }).catch(()=>{});
+          this.$store.commit("setDisabledNavigation", true);
+          return false;
         }
       }
       return false;
@@ -170,11 +164,6 @@ export default {
 
           this.isTopPage = percent == 0 ? true : false;
       });
-    },
-    checkLeavePage() {
-      if (this.$route.name != 'Error' || this.$route.name != 'error') {
-        this.$store.commit("setDisabledNavigation", false);
-      }
     },
   },
   watch: {
