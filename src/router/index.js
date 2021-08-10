@@ -120,7 +120,11 @@ router.beforeEach((to, from, next) => {
     $Store.commit("setDisabledNavigation", false);
   }
   if (to.name != 'Error' || to.name != 'error') {
-    if (to.name != 'Maintenance') {
+    if (to.name != 'Maintenance'
+     && to.name != 'Login' 
+     && to.name != 'Register' 
+     && to.name != 'ForgotPassword'
+    ) {
       $Store.commit("setDisabledNavigation", false);
     } else {
       $Store.commit("setDisabledNavigation", true);
