@@ -87,6 +87,7 @@ export default {
         display: block;
         text-align: center;
         display: flex;
+        border-bottom: 1px solid #000;
         
         .txt {
           margin: 5px 5px;

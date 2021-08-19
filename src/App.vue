@@ -1,12 +1,11 @@
 <template>
   <div class="app-wrapper" 
-        @mousewheel="checkMouseScroll" 
         v-bind:oncontextmenu="disableOnContextMenu">
     
     <div class="app" v-if="!isError">
       <Navigation :disabledNavigation="disabledNavigation" v-if="!disabledNavigation"/>
       <div class="app-container">
-        <ToTopScreen :classMain="appWrapper" v-if="!disabledNavigation"/>
+        <ToTopScreen :currentRoute="currentRoute" v-if="!disabledNavigation"/>
         <router-view />
       </div>
       <Footer :isMaintenance="isMaintenance" v-if="!disabledNavigation"/>
@@ -21,7 +20,8 @@
 import Footer from './components/Footer.vue';
 import Navigation from './components/Navigation.vue';
 import ToTopScreen from './components/ToTopScreen.vue';
-const $ = require('jquery');
+
+// const $ = require('jquery');
 
 export default {
   name: "app",
@@ -33,16 +33,13 @@ export default {
   data() {
     return {
       appWrapper: "app-wrapper",
-      isTopPage: true,
       disableOnContextMenu: false,
+      currentHref: '',
     };
   },
   beforeCreate() {
   },
   beforeUpdate() {
-    // window.onbeforeunload = function () {
-    //   this.checkExceptionRouter();
-    // }
   },
   created() {
     this.initPage();
@@ -77,32 +74,16 @@ export default {
   methods: {
     // Initialize
     initPage() {
+      this.currentRoute = this.$router.currentRoute;
       console.log(this.disabledNavigation);
       this.checkRouter();
       if (!this.checkIsErrorPage()) {
         this.checkIsDevMode();
-      } else {
+      } 
+      else {
         this.$router.push({ name: "Error" }).catch(()=>{});
         return;
       }
-      // window.scroll(0, 0);
-      // var distance = $('.app-wrapper').offset().top,
-      // $window = $(window);
-
-      // console.log('distance: ' + distance);
-
-      // $window.scroll(function() {
-      //     if ( $window.scrollTop() >= distance ) {
-      //         // Your div has reached the top
-      //     }
-      // });
-      
-
-      // console.log('checkLoadPage: ' + this.isTopPage);
-      // if (!this.isTopPage) {
-      //   window.scroll(0, 0);
-      //   return false;
-      // }
     },
     checkIsErrorPage() {
       if (this.isError) {
@@ -116,24 +97,9 @@ export default {
       }
     },
     checkExceptionRouter() {
-      if (!this.isError) {
-        if (!this.isMaintenance) {
-          if (this.$route.name == 'Maintenance') {
-            this.$router.push({ name: "Error" }).catch(()=>{});
-            this.$store.commit("setDisabledNavigation", true);
-            return false;
-          }
-          if (this.$route.name == 'Error') {
-            this.$router.push({ name: "Error" }).catch(()=>{});
-            this.$store.commit("setDisabledNavigation", true);
-            return false;
-          }
-          return true;
-        } else {
+      if (!this.isError && this.isMaintenance) {
           this.$router.push({ name: "Maintenance" }).catch(()=>{});
           this.$store.commit("setDisabledNavigation", true);
-          return false;
-        }
       }
       return false;
     },
@@ -144,26 +110,6 @@ export default {
         this.disableOnContextMenu = '';
       }
       return false;
-    },
-    checkMouseScroll() {
-      $(window).on('scroll', function () {
-          var $this = $(this),
-              $body = $('body');
-
-          var percent = Math.round($this.scrollTop() / ($body.height() - $this.height()) * 100);
-          // console.log('Scroll at: ' + percent + '% screen');
-          
-          if(percent >= 90) {
-            $('#scrollTopButton').addClass('scrollTopButton-Background');
-            $('#scrollTopButton').css('top', 'calc(100% - 200px)');
-            this.isTopPage = false
-          } else {
-            $('#scrollTopButton').removeClass('scrollTopButton-Background');
-            $('#scrollTopButton').css('top', 'calc(100% - 50px)');
-          }
-
-          this.isTopPage = percent == 0 ? true : false;
-      });
     },
   },
   watch: {
@@ -258,13 +204,8 @@ html {
   color: red;
 }
 
-.scrollTopButton-Background {
-  background-color:#fff;
-  border-radius: 15px;
-
-  &:hover {
-    opacity: 1;
-  }
+.blured {
+  opacity: 0.5;
 }
 
 .article-cards-wrap {

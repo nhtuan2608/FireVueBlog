@@ -15,7 +15,8 @@
           <router-link class="link" to="#">Create/ Post</router-link>
           <router-link class="link" :to="{ name: 'Login' }">Login/Register</router-link>
         </ul>
-        <navLanguage />
+        <!-- <NavProfileUser /> -->
+        <NavLanguage />
       </div>
     </nav>
     <!-- Nav PC -->
@@ -25,14 +26,17 @@
       <menuIcon class="menu-icon" @click="toggleMobileNav" v-show="mobie"/>
     </a>
     <transition name="mobile-nav" v-on:before-enter="beforeEnter" v-on:enter="entered">
-      <ul class="mobile-nav" v-show="mobileNav">
-        <h2 class="header" style="color: #fff;">FireBlogs</h2>
-        <hr/>
-        <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
-        <router-link class="link" :to="{ name: 'Articles' }">Articles</router-link>
-        <router-link class="link" to="#">Create/ Post</router-link>
-        <router-link class="link" :to="{ name: 'Login' }">Login/Register</router-link>
-      </ul>
+      <div class="mobile-nav" v-show="mobileNav">
+        <div class="navlink-left">
+          <h2 class="header" style="color: #fff;">FireBlogs</h2>
+          <hr/>
+          <router-link class="link" @click.native="toggleMobileNav" :to="{ name: 'Home' }">Home</router-link>
+          <router-link class="link" @click.native="toggleMobileNav" :to="{ name: 'Articles' }">Articles</router-link>
+          <router-link class="link" @click.native="toggleMobileNav" to="#">Create/Post</router-link>
+          <router-link class="link" @click.native="toggleMobileNav" :to="{ name: 'Login' }">Login/Register</router-link>
+        </div>
+        <div class="navlink-right" @click="toggleMobileNav"></div>
+      </div>
     </transition>
     <!-- Nav Mobile -->
   </header>
@@ -40,16 +44,17 @@
 
 <script>
 import menuIcon from "../assets/Icons/bars-regular.svg";
-import navLanguage from "../components/Nav-Language.vue";
+import NavLanguage from "../components/Nav-Language.vue";
+// import NavProfileUser from "../components/Nav-ProfileUser.vue";
 const $ = require('jquery');
 export default {
   name: "navigation",
   components: {
     menuIcon,
-    navLanguage,
+    NavLanguage,
+    // NavProfileUser,
   },
   props: ['disabledNavigation'],
-  // props: ["isInActive"],
   data() {
     return {
       mobie: null,
@@ -60,19 +65,14 @@ export default {
     };
   },
   created() {
-    window.addEventListener('resize', this.checkScreen);
-    // this.checkOpen();
+    // window.addEventListener('resize', this.checkScreen);
     this.checkScreen();
     this.initNav();
   },
   mounted() {
-    // this.checkOpen();
   },
   computed: {},
   methods: {
-    // checkOpen() {
-    //   console.log("isInActive: " + this.isInActive);
-    // },
     initNav() {
       this.currentUrl = window.location.pathname.split('/')[1];
       var arrLink = $('nav.container').find('a.link');
@@ -103,9 +103,6 @@ export default {
     },
 
     toggleMobileNav() {
-      // if(isToggling) {
-      //   $('.menuLink').addClass('link-disabled');
-      // }
       var isRequested = $('.mobile-nav').hasClass('requestClose');
       console.log(isRequested);
 
@@ -121,9 +118,6 @@ export default {
       } else {
         $('.mobile-nav').removeClass('isActive');
       }
-      // this.isToggling = '';      // if(!isToggling) {
-        // $('.menuLink').removeClass('link-disabled');
-      // }
     },
   }
 };
@@ -255,23 +249,38 @@ a.router-link-exact-active.router-link-active {
    width: auto;
  }
 
- .mobile-nav {
-   padding: 20px;
-   width: 70%;
-   max-width: 250px;
-   display: flex;
-   flex-direction: column;
-   position: fixed;
-   height: 100%;
-   background-color: #000;
-   top: 0;
-   left: 0;
+  .mobile-nav {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    top: 0;
+    left: 0;
 
-   .link {
-     padding: 15px 0;
-     color: #fff;
-   }
- }
+  .navlink-left {
+    padding: 20px;
+    width: 55%;
+    background-color: #000;
+    display: flex;
+    max-width: 250px;
+    flex-direction: column;
+    flex: 1;
+    flex-basis: auto;
+
+    .link {
+      padding: 15px 0;
+      color: #fff;
+      width: 30%;
+    }
+  }
+
+  .navlink-right {
+    opacity: 0;
+    flex: 2;
+    visibility: visible;
+  }
+}
 
  .mobile-nav-enter-active,
  .mobile-nav-leave-active {
