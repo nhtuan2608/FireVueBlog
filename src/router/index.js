@@ -8,6 +8,7 @@ import Register from "../views/Register.vue";
 import ForgotPassword from "../views/ForgotPassword.vue";
 import ErrorPage from "../views/ErrorPage.vue";
 import $Store from "../store";
+// import $Route from "../router";
 
 Vue.use(VueRouter);
 
@@ -110,26 +111,25 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | FireBlogs`;
   console.log(to.name);
-  if (to.name == 'Login' ||
-      to.name == 'Register' ||
-      to.name == 'ForgotPassword'
-  ) {
-    console.log(to.name);
-    $Store.commit("setDisabledNavigation", true);
-  } else {
-    $Store.commit("setDisabledNavigation", false);
-  }
-  if (to.name != 'Error' || to.name != 'error') {
-    if (to.name != 'Maintenance'
-     && to.name != 'Login' 
-     && to.name != 'Register' 
-     && to.name != 'ForgotPassword'
-    ) {
-      $Store.commit("setDisabledNavigation", false);
-    } else {
-      $Store.commit("setDisabledNavigation", true);
+  var isMaintenance = $Store.state.isMaintenance;
+
+  if (to.name != 'Error') {
+    if (!isMaintenance) {      
+      if (to.name == 'Maintenance' || to.name == 'Error') {
+        $Store.commit("setDisabledNavigation", true);
+        return next({ name: "Error" });
+      } else if (to.name != 'Maintenance') {
+        if (to.name == 'Login' || to.name == 'Register' || to.name == 'ForgotPassword') {
+          $Store.commit("setDisabledNavigation", true);
+        } else if (to.name != 'Login' && to.name != 'Register' && to.name != 'ForgotPassword') {
+          $Store.commit("setDisabledNavigation", false);
+        }
+      }
     }
+    return next();
+  } else {
+    console.log();
+    return next();
   }
-  next();
 });
 export default router;
