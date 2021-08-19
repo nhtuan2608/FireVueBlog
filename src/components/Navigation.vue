@@ -15,7 +15,7 @@
           <router-link class="link" to="#">Create/ Post</router-link>
           <router-link class="link" :to="{ name: 'Login' }">Login/Register</router-link>
         </ul>
-        <!-- <NavProfileUser /> -->
+        <NavProfileUser />
         <NavLanguage />
       </div>
     </nav>
@@ -45,14 +45,14 @@
 <script>
 import menuIcon from "../assets/Icons/bars-regular.svg";
 import NavLanguage from "../components/Nav-Language.vue";
-// import NavProfileUser from "../components/Nav-ProfileUser.vue";
+import NavProfileUser from "../components/Nav-ProfileUser.vue";
 const $ = require('jquery');
 export default {
   name: "navigation",
   components: {
     menuIcon,
     NavLanguage,
-    // NavProfileUser,
+    NavProfileUser,
   },
   props: ['disabledNavigation'],
   data() {
