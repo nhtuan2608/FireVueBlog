@@ -1,6 +1,6 @@
 <template>
   <div class="reset-password">
-    <Modal v-if="modalActive" :modalMessage="modalMessage" v-on:close-modal="closeModal" />
+    <Modal v-if="modalActive" v-on:close-modal="closeModal" />
     <Loading v-if="isLoading" />
     <div class="form-wrap">
       <form class="login">
@@ -11,11 +11,7 @@
                   <EmailIcon class="icon" />
               </div>
           </div>
-          <button @click.prevent="resetPassword" type="button">Reset</button>
-          <p class="login-register">
-              Back to Login? 
-              <router-link class="router-link" :to="{name: 'Login'}">Login</router-link>
-          </p>
+          <button type="button">Reset</button>
           <div class="angle"></div>
       </form>
       <div class="background"></div>
@@ -27,11 +23,6 @@
 import EmailIcon from "../assets/Icons/envelope-regular.svg";
 import Modal from "../components/Modal";
 import Loading from "../components/Loading";
-/** Firebase connection */
-import firebase from "firebase/app";
-import "firebase/auth";
-// import db from "../firebase/firebaseInit";
-/** Firebase connection */
 export default {
   name: "ForgetPassword",
   components: {
@@ -41,29 +32,13 @@ export default {
   },
   data() {
     return {
-      email: '',
-      modalActive: false,
+      email: null,
+      modalActive: true,
       modalMessage: '',
       isLoading: false,
     };
   },
   methods: {
-    resetPassword() {
-      this.isLoading = true;
-      if (this.email != '') {
-        firebase.auth().sendPasswordResetEmail(this.email).then(() => {
-          this.modalMessage = 'If your account exists, you will receive an email!';
-        }).catch(err => {
-          this.modalMessage = err.message;
-        });
-        this.isLoading = false;
-        this.modalActive = true;
-      } else {
-        this.modalMessage = 'Please fill out your email to recover your account!';
-        this.isLoading = false;
-        this.modalActive = true;
-      }
-    },
     closeModal() {
       this.modalActive = !this.modalActive;
       this.email = '';

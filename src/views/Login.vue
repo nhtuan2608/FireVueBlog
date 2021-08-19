@@ -1,7 +1,7 @@
 <template>
   <div class="form-wrap">
     <form class="login">
-      <h2>Enjoy Your World</h2>
+      <h2>Login to FireBlogs</h2>
       <div class="inputs">
         <div class="input">
           <input type="text" id="emailInText" placeholder="Email" v-model="email" />
