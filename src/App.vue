@@ -21,6 +21,11 @@ import Footer from './components/Footer.vue';
 import Navigation from './components/Navigation.vue';
 import ToTopScreen from './components/ToTopScreen.vue';
 
+/** Firebase connection */
+import firebase from "firebase/app";
+import "firebase/auth";
+/** Firebase connection */
+
 // const $ = require('jquery');
 
 export default {
@@ -42,6 +47,13 @@ export default {
   beforeUpdate() {
   },
   created() {
+    firebase.auth().onAuthStateChanged((user) => {
+      this.$store.commit("updateUser", user);
+
+      if (user) {
+        this.$store.dispatch("getCurrentUser");
+      }
+    });
     this.initPage();
   },
   mounted() {},
