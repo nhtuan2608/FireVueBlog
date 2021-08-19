@@ -65,7 +65,7 @@ export default {
     };
   },
   created() {
-    // window.addEventListener('resize', this.checkScreen);
+    window.addEventListener('resize', this.checkScreen);
     this.checkScreen();
     this.initNav();
   },
@@ -75,7 +75,7 @@ export default {
   methods: {
     initNav() {
       this.currentUrl = window.location.pathname.split('/')[1];
-      var arrLink = $('nav.container').find('a.link');
+      var arrLink = $('header').find('a.link');
       $.each(arrLink, function(key, val) {
         // console.log('this.url: ' + this.currentUrl);
         if (val.href.split('/')[3] == this.currentUrl) {
@@ -153,7 +153,7 @@ header {
 
       /* Add a red background color to navbar links on hover */
       .navbar a:hover, .dropdown:hover .dropbtn {
-        // color: aqua;
+        color: aqua;
       }
 
       /* Dropdown content (hidden by default) */
@@ -204,7 +204,7 @@ header {
     }
 }
 a.router-link-exact-active.router-link-active {
-  color: aqua;
+  color: aqua !important;
 }
 
  nav {
