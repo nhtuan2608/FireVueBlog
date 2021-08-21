@@ -1,12 +1,11 @@
 <template>
   <div class="app-wrapper" 
-        @mousewheel="checkMouseScroll" 
         v-bind:oncontextmenu="disableOnContextMenu">
     
     <div class="app" v-if="!isError">
       <Navigation :disabledNavigation="disabledNavigation" v-if="!disabledNavigation"/>
       <div class="app-container">
-        <ToTopScreen :classMain="appWrapper" v-if="!disabledNavigation"/>
+        <ToTopScreen :currentRoute="currentRoute" v-if="!disabledNavigation"/>
         <router-view />
       </div>
       <Footer :isMaintenance="isMaintenance" v-if="!disabledNavigation"/>
@@ -21,7 +20,13 @@
 import Footer from './components/Footer.vue';
 import Navigation from './components/Navigation.vue';
 import ToTopScreen from './components/ToTopScreen.vue';
-const $ = require('jquery');
+
+/** Firebase connection */
+import firebase from "firebase/app";
+import "firebase/auth";
+/** Firebase connection */
+
+// const $ = require('jquery');
 
 export default {
   name: "app",
@@ -33,26 +38,26 @@ export default {
   data() {
     return {
       appWrapper: "app-wrapper",
-      isTopPage: true,
       disableOnContextMenu: false,
-      // disabledNavigation: null,
-      // isErrorPage: false,
+      currentHref: '',
     };
   },
   beforeCreate() {
-    
   },
   beforeUpdate() {
-    // window.onbeforeunload = function () {
-    //   return '';
-    // }
   },
   created() {
+    firebase.auth().onAuthStateChanged((user) => {
+      this.$store.commit("updateUser", user);
+
+      if (user) {
+        this.$store.dispatch("getCurrentUser");
+      }
+    });
     this.initPage();
   },
   mounted() {},
   beforeDestroy() {
-    this.checkLeavePage();
   },
   computed: {
     isDevMode() {
@@ -81,32 +86,16 @@ export default {
   methods: {
     // Initialize
     initPage() {
+      this.currentRoute = this.$router.currentRoute;
       console.log(this.disabledNavigation);
       this.checkRouter();
       if (!this.checkIsErrorPage()) {
         this.checkIsDevMode();
-      } else {
-        this.$router.push("/error").catch(()=>{});
+      } 
+      else {
+        this.$router.push({ name: "Error" }).catch(()=>{});
         return;
       }
-      // window.scroll(0, 0);
-      // var distance = $('.app-wrapper').offset().top,
-      // $window = $(window);
-
-      // console.log('distance: ' + distance);
-
-      // $window.scroll(function() {
-      //     if ( $window.scrollTop() >= distance ) {
-      //         // Your div has reached the top
-      //     }
-      // });
-      
-
-      // console.log('checkLoadPage: ' + this.isTopPage);
-      // if (!this.isTopPage) {
-      //   window.scroll(0, 0);
-      //   return false;
-      // }
     },
     checkIsErrorPage() {
       if (this.isError) {
@@ -116,42 +105,13 @@ export default {
     },
     checkRouter() {
       if (this.checkExceptionRouter()) {
-        // this.$store.commit("setDisabledNavigation", true);
         return;
       }
     },
     checkExceptionRouter() {
-      if (!this.isError) {
-        // if (this.isMaintenance) {
-        //   if (this.$route.name == 'Maintenance' ||
-        //     this.$route.name == 'Login' ||
-        //     this.$route.name == 'Register' ||
-        //     this.$route.name == 'ForgotPassword'
-        //   ) {
-        //     return true;
-        //   }
-        //   return false;
-        // }
-        if (!this.isMaintenance) {
-          if (this.$route.name == 'Login' ||
-            this.$route.name == 'Register' ||
-            this.$route.name == 'ForgotPassword'
-          ) {
-            this.$store.commit("setDisabledNavigation", true);
-            return false;
-          }
-          if (this.$route.name == 'Maintenance') {
-            this.$router.push("/error").catch(()=>{});
-            this.$store.commit("setDisabledNavigation", true);
-            return false;
-          }
-          if (this.$route.name == 'Error') {
-            this.$router.push("/error").catch(()=>{});
-            this.$store.commit("setDisabledNavigation", true);
-            return false;
-          }
-          return true;
-        }
+      if (!this.isError && this.isMaintenance) {
+          this.$router.push({ name: "Maintenance" }).catch(()=>{});
+          this.$store.commit("setDisabledNavigation", true);
       }
       return false;
     },
@@ -163,38 +123,13 @@ export default {
       }
       return false;
     },
-    checkMouseScroll() {
-      $(window).on('scroll', function () {
-          var $this = $(this),
-              $body = $('body');
-
-          var percent = Math.round($this.scrollTop() / ($body.height() - $this.height()) * 100);
-          // console.log('Scroll at: ' + percent + '% screen');
-          
-          if(percent >= 90) {
-            $('#scrollTopButton').addClass('scrollTopButton-Background');
-            $('#scrollTopButton').css('top', 'calc(100% - 200px)');
-            this.isTopPage = false
-          } else {
-            $('#scrollTopButton').removeClass('scrollTopButton-Background');
-            $('#scrollTopButton').css('top', 'calc(100% - 50px)');
-          }
-
-          this.isTopPage = percent == 0 ? true : false;
-      });
-    },
-    checkLeavePage() {
-      if (this.$route.name != 'Error' || this.$route.name != 'error') {
-        this.$store.commit("setDisabledNavigation", false);
-      }
-    },
   },
   watch: {
-    $route(to , from) {
-      console.log(this.isError);
-      console.log("to", to);
-      console.log("from", from);
-    }
+    // $route(to , from) {
+    //   console.log(this.isError);
+    //   console.log("to", to);
+    //   console.log("from", from);
+    // }
   },
 };
 </script>
@@ -275,13 +210,14 @@ html {
     text-transform: uppercase;
 }
 
-.scrollTopButton-Background {
-  background-color:#fff;
-  border-radius: 15px;
+.errMessage {
+  text-align: center;
+  font-size: 12px;
+  color: red;
+}
 
-  &:hover {
-    opacity: 1;
-  }
+.blured {
+  opacity: 0.5;
 }
 
 .article-cards-wrap {

@@ -1,21 +1,21 @@
 <template>
-  <div class="languages" v-if="!getLanguagesPackage.isOff">
+  <div class="languages-wrap" v-if="!getLanguagesPackage.isOff">
         <div class="dropdown">
-        <button class="dropbtn">
-            <i class="material-icons">language</i>
-            <i class="material-icons">arrow_drop_down</i>
-        </button>
-        <div class="dropdown-content">
-            <span v-for="(language, index) in getLanguagesPackage.languages" :key="index">
-                <a href="#" @click="changeLanguage(language)">
-                    <img :src="require(`../assets/flag/${language}-flag.png`)" height="30px"/>
-                    <span class="txt">{{language}}</span>
-                    <span v-if="language == getLanguagesPackage.chosenLanguage">
-                        <i class="material-icons">done</i>
-                    </span>
-                </a>
-            </span>
-        </div>
+          <button href="javascript:void(0);" class="dropbtn" >
+              <i class="material-icons">language</i>
+              <i class="material-icons">arrow_drop_down</i>
+          </button>
+          <div class="dropdown-content">
+              <span v-for="(language, index) in getLanguagesPackage.languages" :key="index">
+                  <a href="#" @click="changeLanguage(language)">
+                      <img :src="require(`../assets/flag/${language}-flag.png`)" height="30px"/>
+                      <span class="txt">{{language}}</span>
+                      <span v-if="language == getLanguagesPackage.chosenLanguage">
+                          <i class="material-icons">done</i>
+                      </span>
+                  </a>
+              </span>
+          </div>
         </div>
     </div>
 </template>
@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .languages {
+    .languages-wrap {
       margin-top: 5px;
 
       /* The dropdown container */
@@ -52,18 +52,20 @@ export default {
       }
 
       /* Dropdown button */
-      .dropdown .dropbtn {
+      .dropdown button.dropbtn {
+        padding: 12px 12px;
         font-size: 16px;
         border: none;
         outline: none;
         background-color: inherit;
         font-family: inherit; /* Important for vertical align on mobile phones */
         margin: 0; /* Important for vertical align on mobile phones */
+        color: #000;
       }
 
       /* Add a red background color to navbar links on hover */
       .navbar a:hover, .dropdown:hover .dropbtn {
-        color: aqua;
+        // color: aqua;
       }
 
       /* Dropdown content (hidden by default) */
@@ -73,8 +75,12 @@ export default {
         right: 10px;
         background-color: #f9f9f9;
         min-width: 120px;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        // box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         z-index: 1;
+        border: 1px solid #C7D9FF;
+        box-shadow: 0 0 10px #050608;
+        -webkit-box-shadow: 0 0 10px #050608;
+        -moz-box-shadow: 0 0 10px #050608;
       }
 
       /* Links inside the dropdown */
@@ -86,10 +92,7 @@ export default {
         display: block;
         text-align: center;
         display: flex;
-
-        a.router-link-exact-active.router-link-active {
-            color: aqua;
-        }
+        border-bottom: 1px solid #000;
         
         .txt {
           margin: 5px 5px;
