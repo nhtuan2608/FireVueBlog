@@ -34,11 +34,6 @@
 <script>
 import EmailIcon from "../assets/Icons/envelope-regular.svg";
 import PwdIcon from "../assets/Icons/lock-alt-solid.svg";
-/** Firebase connection */
-import firebase from "firebase/app";
-import "firebase/auth";
-// import db from "../firebase/firebaseInit";
-/** Firebase connection */
 const $ = require("jquery");
 export default {
   name: "Login",
@@ -58,19 +53,8 @@ export default {
   methods: {
     signIn() {
       if (this.validateInput()) {
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(this.email, this.password)
-          .then(() => {
-            this.$router.push({ name: "Home" });
-            this.error = false;
-            this.errMessage = "";
-            console.log(firebase.auth().currentUser.uid);
-          })
-          .catch((err) => {
-            this.error = true;
-            this.errMessage = err;
-          });
+          // Call method to get user in DB
+          return;
       } else {
           return;
       }

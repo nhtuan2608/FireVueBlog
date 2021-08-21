@@ -38,11 +38,6 @@
 import EmailIcon from "../assets/Icons/envelope-regular.svg";
 import PwdIcon from "../assets/Icons/lock-alt-solid.svg";
 import UserIcon from "../assets/Icons/user-alt-light.svg";
-/** Firebase connection */ 
-import firebase from "firebase/app";
-import "firebase/auth";
-import db from "../firebase/firebaseInit";
-/** Firebase connection */ 
 const $ = require('jquery');
 export default {
   name: "Register",
@@ -68,16 +63,7 @@ export default {
       if (!this.validateInput()) {
         return;
       } else {
-        const firebaseAuth = await firebase.auth();
-        const createUser = await firebaseAuth.createUserWithEmailAndPassword(this.email, this.password);
-        const result = await createUser;
-        const database = db.collection("users").doc(result.user.uid);
-        await database.set({
-          firstName: this.firstName,
-          lastName: this.lastName,
-          userName: this.userName,
-          email: this.email,
-        });
+        // Call method to new record in DB
         this.$router.push({name: 'Home'});
         return;
       }

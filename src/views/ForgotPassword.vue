@@ -27,11 +27,6 @@
 import EmailIcon from "../assets/Icons/envelope-regular.svg";
 import Modal from "../components/Modal";
 import Loading from "../components/Loading";
-/** Firebase connection */
-import firebase from "firebase/app";
-import "firebase/auth";
-// import db from "../firebase/firebaseInit";
-/** Firebase connection */
 export default {
   name: "ForgetPassword",
   components: {
@@ -51,11 +46,13 @@ export default {
     resetPassword() {
       this.isLoading = true;
       if (this.email != '') {
-        firebase.auth().sendPasswordResetEmail(this.email).then(() => {
-          this.modalMessage = 'If your account exists, you will receive an email!';
-        }).catch(err => {
-          this.modalMessage = err.message;
-        });
+        // Write your call method below
+        ``````
+        // Success call method
+        this.modalMessage = 'If your account exists, you will receive an email!';
+        // Catch err Falied
+        var err;
+        this.modalMessage = err.message;
         this.isLoading = false;
         this.modalActive = true;
       } else {

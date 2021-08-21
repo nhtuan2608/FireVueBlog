@@ -2,11 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 // import createPersistedState from 'vuex-persistedstate';	// Vuex keep state on page refresh
 // import Cookies from 'js-cookie';
-/** Firebase connection */
-import firebase from "firebase/app";
-import "firebase/auth";
-import db from "../firebase/firebaseInit";
-/** Firebase connection */
 
 Vue.use(Vuex)
 
@@ -64,27 +59,9 @@ export default new Vuex.Store({
         updateUser(state, payload) {
             state.user = payload;
         },
-        setProfileInfo(state, dbResults) {
-            state.userProfile.id = dbResults.id;
-            state.userProfile.email = dbResults.data().email;
-            state.userProfile.firstName = dbResults.data().firstName;
-            state.userProfile.lastName = dbResults.data().lastName;
-            state.userProfile.userName = dbResults.data().userName;
-        },
-        setProfileInitials(state) {
-            state.userProfile.initials = 
-                    state.userProfile.firstName.match(/(\b\S)?/g).join("") +
-                    state.userProfile.lastName.match(/(\b\S)?/g).join("");
-        },
     },
     actions: {
-        async getCurrentUser({commit}) {
-            const database = await db.collection('users').doc(firebase.auth().currentUser.uid);
-            const dbResults = await database.get();
-            commit('setProfileInfo', dbResults);
-            commit('setProfileInitials');
-            console.log(dbResults);
-        },
+        // Write async method call DB to get record
     },
     modules: {
     }
