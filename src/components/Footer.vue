@@ -19,9 +19,12 @@
           </ul>
         </div>
         <div class="col-2">
-            <ul>
-                <router-link class="link" :to="{name: '/'}">Home</router-link>
-                <router-link class="link" :to="{name: 'Articles'}">Articles</router-link>
+            <ul v-if="!isMaintenance">
+              <router-link class="link" :to="{name: '/'}">Home</router-link>
+              <router-link class="link" :to="{name: 'Articles'}">Articles</router-link>
+            </ul>
+            <ul v-else-if="isMaintenance">
+              <router-link class="link" to="#">Contact Us</router-link>
             </ul>
         </div>
       </div>
@@ -39,6 +42,7 @@ import instagram from "../assets/Icons/instagram-brands.svg";
 
 export default {
   name: "footer-vue",
+  props: ["isMaintenance"],
   components: {
     youtube,
     twitter,
@@ -60,7 +64,7 @@ footer {
     gap: 32px;
 
     @media (min-width: 800px) {
-      flex: row;
+      flex-direction: row;
       gap: 0px;
     }
 

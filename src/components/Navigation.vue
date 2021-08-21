@@ -1,5 +1,6 @@
 <template>
   <header>
+    <!-- Nav PC -->
     <nav class="container">
       <div class="branding">
         <router-link class="header" :to="{ name: '/' }">
@@ -7,53 +8,19 @@
         </router-link>
       </div>
       
-      <div class="nav-links" v-show="!mobie">
+      <div class="nav-links" v-show="!mobie || !!disabledNavigation">
         <ul>
           <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
           <router-link class="link" :to="{ name: 'Articles' }">Articles</router-link>
           <router-link class="link" to="#">Create/ Post</router-link>
-          <router-link class="link" to="#">Login/Register</router-link>
+          <router-link class="link" :to="{ name: 'Login' }">Login/Register</router-link>
         </ul>
         <navLanguage />
-        <!-- <div class="languages">
-          <div class="dropdown">
-            <button class="dropbtn">
-              <i class="material-icons">language</i>
-              <i class="material-icons">arrow_drop_down</i>
-            </button>
-            <div class="dropdown-content">
-              <span>
-                <a href="#" @click="changeLanguage('en')">
-                  <img :src="require('../assets/flag/GB-UK-flag.png')" height="30px"/>
-                  <span class="txt">EN</span>
-                  <span v-if="checkLaguage.chosenLanguage == 'en'">
-                    <i class="material-icons">done</i>
-                  </span>
-                </a>
-              </span>
-              <span>
-                <a href="#" @click="changeLanguage('vn')">
-                  <img :src="require('../assets/flag/VN-Vietnam-flag.png')" height="30px" />
-                  <span class="txt">VN</span>
-                  <span v-if="checkLaguage.chosenLanguage == 'vn'">
-                    <i class="material-icons">done</i>
-                  </span>
-                </a>
-              </span>
-              <span>
-                <a href="#" @click="changeLanguage('jp')">
-                  <img :src="require('../assets/flag/JP-Japan-flag.png')" height="30px" />
-                  <span class="txt">JP</span>
-                  <span v-if="checkLaguage.chosenLanguage == 'jp'">
-                    <i class="material-icons">done</i>
-                  </span>
-                </a>
-              </span>
-            </div>
-          </div>
-        </div> -->
       </div>
     </nav>
+    <!-- Nav PC -->
+
+    <!-- Nav Mobile -->
     <a href="javascript:void(0)" class="menuLink" v-bind:class="isToggling">
       <menuIcon class="menu-icon" @click="toggleMobileNav" v-show="mobie"/>
     </a>
@@ -64,9 +31,10 @@
         <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
         <router-link class="link" :to="{ name: 'Articles' }">Articles</router-link>
         <router-link class="link" to="#">Create/ Post</router-link>
-        <router-link class="link" to="#">Login/Register</router-link>
+        <router-link class="link" :to="{ name: 'Login' }">Login/Register</router-link>
       </ul>
     </transition>
+    <!-- Nav Mobile -->
   </header>
 </template>
 
@@ -80,7 +48,7 @@ export default {
     menuIcon,
     navLanguage,
   },
-  props: ['url'],
+  props: ['disabledNavigation'],
   // props: ["isInActive"],
   data() {
     return {
@@ -88,6 +56,7 @@ export default {
       mobileNav: null,
       windowWidth: null,
       isToggling: null,
+      currentUrl: '',
     };
   },
   created() {
@@ -99,19 +68,17 @@ export default {
   mounted() {
     // this.checkOpen();
   },
-  computed: {
-    // getLanguagesPackage() {
-    //   return this.$store.state.languagesPackage;
-    // },
-  },
+  computed: {},
   methods: {
     // checkOpen() {
     //   console.log("isInActive: " + this.isInActive);
     // },
     initNav() {
+      this.currentUrl = window.location.pathname.split('/')[1];
       var arrLink = $('nav.container').find('a.link');
       $.each(arrLink, function(key, val) {
-        if (val.href.split('/')[3] == this.url) {
+        // console.log('this.url: ' + this.currentUrl);
+        if (val.href.split('/')[3] == this.currentUrl) {
           arrLink[key].addClass('router-link-exact-active.router-link-active');
           return false;
         }

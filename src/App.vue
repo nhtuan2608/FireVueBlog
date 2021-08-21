@@ -2,14 +2,18 @@
   <div class="app-wrapper" 
         @mousewheel="checkMouseScroll" 
         v-bind:oncontextmenu="disableOnContextMenu">
-    <div class="app">
-      <Navigation :url="urlRouter"/>
+    
+    <div class="app" v-if="!isError">
+      <Navigation :disabledNavigation="disabledNavigation" v-if="!disabledNavigation"/>
       <div class="app-container">
-        <ToTopScreen :classMain="appWrapper"/>
+        <ToTopScreen :classMain="appWrapper" v-if="!disabledNavigation"/>
         <router-view />
       </div>
-      <Footer />
+      <Footer :isMaintenance="isMaintenance" v-if="!disabledNavigation"/>
     </div>
+    <!-- <div class="app-errorPage" v-if="!!isError">
+      <router-view />
+    </div> -->
   </div>
 </template>
 
@@ -31,27 +35,60 @@ export default {
       appWrapper: "app-wrapper",
       isTopPage: true,
       disableOnContextMenu: false,
-      urlRouter: '',
+      // disabledNavigation: null,
+      // isErrorPage: false,
     };
+  },
+  beforeCreate() {
+    
+  },
+  beforeUpdate() {
+    // window.onbeforeunload = function () {
+    //   return '';
+    // }
   },
   created() {
     this.initPage();
   },
-  beforeUpdate() {
-    this.checkRouter();
+  mounted() {},
+  beforeDestroy() {
+    this.checkLeavePage();
   },
   computed: {
     isDevMode() {
       return this.$store.state.isDevMode;
+    },
+    isMaintenance() {
+      return this.$store.state.isMaintenance;
+    },
+    disabledNavigation: {
+      get() {
+        return this.$store.state.disabledNavigation;
+      },
+      set(payload) {
+        this.$store.commit("setDisabledNavigation", payload);
+      }
+    },
+    isError: {
+      get() {
+        return this.$store.state.isError;
+      },
+      set(payload) {
+        this.$store.commit("setIsErrorPage", payload);
+      }
     }
   },
   methods: {
     // Initialize
     initPage() {
-      this.checkIsDevMode();
+      console.log(this.disabledNavigation);
       this.checkRouter();
-
-
+      if (!this.checkIsErrorPage()) {
+        this.checkIsDevMode();
+      } else {
+        this.$router.push("/error").catch(()=>{});
+        return;
+      }
       // window.scroll(0, 0);
       // var distance = $('.app-wrapper').offset().top,
       // $window = $(window);
@@ -71,9 +108,52 @@ export default {
       //   return false;
       // }
     },
+    checkIsErrorPage() {
+      if (this.isError) {
+        return true;
+      }
+      return false;
+    },
     checkRouter() {
-      var url = this.$route.name;
-      this.urlRouter = url;
+      if (this.checkExceptionRouter()) {
+        // this.$store.commit("setDisabledNavigation", true);
+        return;
+      }
+    },
+    checkExceptionRouter() {
+      if (!this.isError) {
+        // if (this.isMaintenance) {
+        //   if (this.$route.name == 'Maintenance' ||
+        //     this.$route.name == 'Login' ||
+        //     this.$route.name == 'Register' ||
+        //     this.$route.name == 'ForgotPassword'
+        //   ) {
+        //     return true;
+        //   }
+        //   return false;
+        // }
+        if (!this.isMaintenance) {
+          if (this.$route.name == 'Login' ||
+            this.$route.name == 'Register' ||
+            this.$route.name == 'ForgotPassword'
+          ) {
+            this.$store.commit("setDisabledNavigation", true);
+            return false;
+          }
+          if (this.$route.name == 'Maintenance') {
+            this.$router.push("/error").catch(()=>{});
+            this.$store.commit("setDisabledNavigation", true);
+            return false;
+          }
+          if (this.$route.name == 'Error') {
+            this.$router.push("/error").catch(()=>{});
+            this.$store.commit("setDisabledNavigation", true);
+            return false;
+          }
+          return true;
+        }
+      }
+      return false;
     },
     checkIsDevMode() {
       if (!this.isDevMode) {
@@ -103,19 +183,18 @@ export default {
           this.isTopPage = percent == 0 ? true : false;
       });
     },
-    
-    checkPositionScroll() {
-
+    checkLeavePage() {
+      if (this.$route.name != 'Error' || this.$route.name != 'error') {
+        this.$store.commit("setDisabledNavigation", false);
+      }
     },
   },
   watch: {
-    // $(window).on("scroll", function() {
-    //   var scrollHeight = $(document).height();
-    //   var scrollPosition = $(window).height() + $(window).scrollTop();
-    //   if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
-    //       // when scroll to bottom of the page
-    //   }
-    // });
+    $route(to , from) {
+      console.log(this.isError);
+      console.log("to", to);
+      console.log("from", from);
+    }
   },
 };
 </script>
@@ -184,6 +263,18 @@ html {
   }
 }
 
+.router-button, button {
+    transition: all .5s ease;
+    cursor: pointer;
+    margin-top: 24px;
+    padding: 12px 24px;
+    background-color: #303030;
+    color: #fff;
+    border-radius: 20px;
+    border: none;
+    text-transform: uppercase;
+}
+
 .scrollTopButton-Background {
   background-color:#fff;
   border-radius: 15px;
@@ -217,6 +308,25 @@ html {
     // Pc, Desktop
     @media (min-width: 1200px) {
       grid-template-columns: repeat(4, 1fr);
+    }
+
+    .articles {
+      display: grid;
+      gap: 32px;
+      grid-template-columns: 1fr;
+
+      // Phone
+      @media (min-width: 500px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      // Ipad
+      @media (min-width: 900px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      // Pc, Desktop
+      @media (min-width: 1200px) {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
   }
 }

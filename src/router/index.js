@@ -2,6 +2,12 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import Articles from "../views/Articles.vue";
+import Maintenance from "../views/Maintenance.vue";
+import Login from "../views/Login.vue";
+import Register from "../views/Register.vue";
+import ForgotPassword from "../views/ForgotPassword.vue";
+import ErrorPage from "../views/ErrorPage.vue";
+// import $Store from "../store";
 
 Vue.use(VueRouter);
 
@@ -11,7 +17,7 @@ const routes = [
     name: "/",
     component: Home,
     meta: {
-      title: 'Home',
+      title: 'HomePage',
     },
   },
   {
@@ -19,8 +25,25 @@ const routes = [
     name: "Home",
     component: Home,
     meta: {
-      title: 'Home',
+      title: 'HomePage',
     },
+  },
+  {
+    path: "/error",
+    name: "Error",
+    component: ErrorPage,
+    meta: {
+      title: 'Error Page',
+    },
+    // beforeEnter: (to, from, next) => {
+    //   if (window.location.pathname == '/Error') {
+    //     if (to.path == '/Error') {
+    //       next(false);
+    //       return;
+    //     }
+    //   }
+    //   next();
+    // },
   },
   {
     path: "/articles",
@@ -30,33 +53,73 @@ const routes = [
       title: 'Articles',
     },
   },
+  {
+    path: "/maintenance",
+    name: "Maintenance",
+    component: Maintenance,
+    meta: {
+      title: 'Maintenance',
+    },
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+    meta: {
+      title: 'Login',
+    },
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: Register,
+    meta: {
+      title: 'Register',
+    },
+  },
+  {
+    path: "/forgotpassword",
+    name: "ForgotPassword",
+    component: ForgotPassword,
+    meta: {
+      title: 'Forgot Password',
+    },
+  },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
-  // scrollBehavior (to, from, savedPosition) {
-  //   if (savedPosition) {
-  //     return {
-  //       selector: savedPosition,
-  //       behavior: 'smooth',
-  //     }
-  //   } else {
-  //     return { 
-  //       x: 0, 
-  //       y: 0,
-  //       behavior: 'smooth',
-  //     };
-  //   }
-  // }
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return {
+        selector: savedPosition,
+        behavior: 'smooth',
+      }
+    } else {
+      return { 
+        x: 0, 
+        y: 0,
+        behavior: 'smooth',
+      };
+    }
+  },
 });
 
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title} | FireBlogs`;
-  window.screenX = 0;
-  window.screenY = 0;
+  // console.log(VueRouter.START_LOCATION);
+  // if (!$Store.state.isError) {
+  //   next();
+  //   return;
+  // }
+
+  // console.log($Store.state.isError);
+  // console.log(from);
+  // if (from === 'error') {
+  //   console.log('trùng');
+  // }
   next();
 });
-
 export default router;
