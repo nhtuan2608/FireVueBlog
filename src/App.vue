@@ -3,7 +3,7 @@
         v-bind:oncontextmenu="disableOnContextMenu">
     
     <div class="app" v-if="!isError">
-      <Navigation :disabledNavigation="disabledNavigation" v-if="!disabledNavigation"/>
+      <Navigation :hasUse="getUser" :disabledNavigation="disabledNavigation" v-if="!disabledNavigation"/>
       <div class="app-container">
         <ToTopScreen :currentRoute="currentRoute" v-if="!disabledNavigation"/>
         <router-view />
@@ -48,7 +48,7 @@ export default {
   },
   created() {
     firebase.auth().onAuthStateChanged((user) => {
-      this.$store.commit("updateUser", user);
+      this.$store.commit("updateCredentials", user);
 
       if (user) {
         this.$store.dispatch("getCurrentUser");
@@ -81,7 +81,10 @@ export default {
       set(payload) {
         this.$store.commit("setIsErrorPage", payload);
       }
-    }
+    },
+    getUser() {
+      return this.$store.state.user;
+    },
   },
   methods: {
     // Initialize

@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-wrap">
+  <div v-if="this.hasUser" class="profile-wrap">
         <div class="dropdown">
             <button href="javascript:void(0);" class="dropbtn" >
                 <i class="material-icons contentBtn">account_circle</i>
@@ -29,11 +29,11 @@
                               <p>Admin</p>
                           </router-link>
                       </div>
-                      <div class="option">
-                          <router-link class="option" to="#">
-                              <signOutIcon class="icon"/>
-                              <p>Sign Out</p>
-                          </router-link>
+                      <div @click="signOut" class="option">
+                          <a class="option">
+                            <signOutIcon class="icon"/>
+                            <p>Sign Out</p>
+                          </a>
                       </div>
                   </div>
               </div>
@@ -43,9 +43,16 @@
 </template>
 
 <script>
+
 import userIcon from "../assets/Icons/user-alt-light.svg";
 import adminIcon from "../assets/Icons/user-crown-light.svg";
 import signOutIcon from "../assets/Icons/sign-out-alt-regular.svg";
+
+/** Firebase connection */
+import firebase from "firebase/app";
+import "firebase/auth";
+/** Firebase connection */
+
 export default {
     name: 'Nav-Profile',
     components: {
@@ -53,11 +60,16 @@ export default {
         adminIcon,
         signOutIcon,
     },
+    props: ['hasUser'],
     data() {
         return {
         }
     },
     methods: {
+        signOut() {
+            firebase.auth().signOut();
+            window.location.reload()
+        }
     },
     computed: {
     }
@@ -105,7 +117,7 @@ export default {
       .dropdown-content {
         display: none;
         position: absolute;
-        right: 140px;
+        right: 120px;
         background-color: #f9f9f9;
         min-width: 120px;
         // box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);

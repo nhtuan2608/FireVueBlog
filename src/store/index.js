@@ -61,9 +61,11 @@ export default new Vuex.Store({
             state.disabledNavigation = payload;             // if true, disable navigation
             localStorage.setItem("pageNotFound" ,JSON.stringify(state.disabledNavigation)); // OR
         },
-        updateUser(state, payload) {
+        // Check user login or logout App.vue
+        updateCredentials(state, payload) {
             state.user = payload;
         },
+        // Get info user store/index.js
         setProfileInfo(state, dbResults) {
             state.userProfile.id = dbResults.id;
             state.userProfile.email = dbResults.data().email;
@@ -71,6 +73,7 @@ export default new Vuex.Store({
             state.userProfile.lastName = dbResults.data().lastName;
             state.userProfile.userName = dbResults.data().userName;
         },
+        // Get info user store/index.js
         setProfileInitials(state) {
             state.userProfile.initials = 
                     state.userProfile.firstName.match(/(\b\S)?/g).join("") +

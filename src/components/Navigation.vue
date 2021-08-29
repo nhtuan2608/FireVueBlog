@@ -13,9 +13,9 @@
           <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
           <router-link class="link" :to="{ name: 'Articles' }">Articles</router-link>
           <router-link class="link" to="#">Create/ Post</router-link>
-          <router-link class="link" :to="{ name: 'Login' }">Login/Register</router-link>
+          <router-link class="link" :to="{ name: 'Login' }" v-show="!this.hasUser">Login/Register</router-link>
         </ul>
-        <NavProfileUser />
+        <NavProfileUser :hasUser="this.hasUser" />
         <NavLanguage />
       </div>
     </nav>
@@ -33,7 +33,7 @@
           <router-link class="link" @click.native="toggleMobileNav" :to="{ name: 'Home' }">Home</router-link>
           <router-link class="link" @click.native="toggleMobileNav" :to="{ name: 'Articles' }">Articles</router-link>
           <router-link class="link" @click.native="toggleMobileNav" to="#">Create/Post</router-link>
-          <router-link class="link" @click.native="toggleMobileNav" :to="{ name: 'Login' }">Login/Register</router-link>
+          <router-link class="link" @click.native="toggleMobileNav" :to="{ name: 'Login' }" v-show="!this.hasUser">Login/Register</router-link>
         </div>
         <div class="navlink-right" @click="toggleMobileNav"></div>
       </div>
@@ -54,7 +54,7 @@ export default {
     NavLanguage,
     NavProfileUser,
   },
-  props: ['disabledNavigation'],
+  props: ['disabledNavigation', 'hasUser'],
   data() {
     return {
       mobie: null,
