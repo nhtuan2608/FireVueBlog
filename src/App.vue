@@ -3,7 +3,7 @@
         v-bind:oncontextmenu="disableOnContextMenu">
     
     <div class="app" v-if="!isError">
-      <Navigation :hasUse="getUser" :disabledNavigation="disabledNavigation" v-if="!disabledNavigation"/>
+      <Navigation :hasUser="getUser" :disabledNavigation="disabledNavigation" v-if="!disabledNavigation"/>
       <div class="app-container">
         <ToTopScreen :currentRoute="currentRoute" v-if="!disabledNavigation"/>
         <router-view />
@@ -83,7 +83,7 @@ export default {
       }
     },
     getUser() {
-      return this.$store.state.user;
+      return this.$store.state.user != null ? true : false;
     },
   },
   methods: {
