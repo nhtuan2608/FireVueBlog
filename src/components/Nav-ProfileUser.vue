@@ -68,7 +68,7 @@ export default {
     methods: {
         signOut() {
             firebase.auth().signOut();
-            window.location.reload()
+            window.location.reload();
         }
     },
     computed: {
